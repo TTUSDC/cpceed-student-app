@@ -1,10 +1,10 @@
 {
   "source": ".",
   "destination": "./docs",
-  "includes": ["^api", "^src"],
+  "includes": ["^src"],
   "unexportIdentifier": true,
   "undocumentIdentifier": false,
-  "title": "CPCEED",
+  "title": "cpceed-student-app",
   "lint": false,
   "plugins": [
     {"name": "esdoc-node"}

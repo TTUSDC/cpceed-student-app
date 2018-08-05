@@ -7,6 +7,8 @@ const base = require('./base.js');
 const buildPath = path.resolve(__dirname, '../build');
 
 const dev = webpackMerge(base, {
+  mode: 'development',
+
   output: {
     path: buildPath,
     publicPath: '/',

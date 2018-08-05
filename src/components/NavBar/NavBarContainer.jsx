@@ -7,6 +7,8 @@ import * as server from 'server';
 import logger from 'logger.js';
 import NavBar from './NavBar.jsx';
 
+logger.info('Hello World')
+
 class NavBarContainer extends React.Component {
   constructor(props) {
     super(props);

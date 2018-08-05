@@ -7,11 +7,13 @@ const base = require('./base.js');
 const buildPath = path.resolve(__dirname, '../build');
 
 const prod = webpackMerge(base, {
+  mode: 'production',
+
   output: {
     path: buildPath,
     publicPath: '/',
-    filename: "bundle.js"
-  },
+      filename: "bundle.js"
+    },
 
   entry: './src/index.jsx',
 
@@ -23,4 +25,4 @@ const prod = webpackMerge(base, {
   ]
 });
 
-module.exports = prod;
+module.exports = prod

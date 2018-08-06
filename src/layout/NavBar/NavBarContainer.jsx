@@ -8,7 +8,7 @@ import logger from 'logger.js';
 import { NavBar } from './components';
 
 
-class NavBarContainer extends React.Component<Props> {
+class NavBarContainer extends React.Component {
   state = {
     auth: false,
   };

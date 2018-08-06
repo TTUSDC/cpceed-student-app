@@ -9,16 +9,16 @@ const test = webpackMerge(base, {
   externals: {
     'react/addons': true,
     'react/lib/ExecutionEnvironment': true,
-    'react/lib/ReactContext': true
+    'react/lib/ReactContext': true,
   },
 
   devtool: 'inline-source-map',
 
   plugins: [
     new webpack.DefinePlugin({
-      ENV: JSON.stringify('test')
-    })
-  ]
+      ENV: JSON.stringify('test'),
+    }),
+  ],
 });
 
 module.exports = test;

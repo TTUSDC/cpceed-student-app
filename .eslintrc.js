@@ -3,8 +3,9 @@ module.exports = {
   "env": {
     "mocha": true,
     "node": true,
-    "browser": true,
+    "browser": true
   },
+  "parser": "babel-eslint",
   "plugins": ["chai-friendly"],
   "rules": {
     "no-unused-expressions": 0,
@@ -12,6 +13,6 @@ module.exports = {
     "import/no-extraneous-dependencies": 0,
     "import/extensions": 0,
     "import/no-unresolved": 0,
-    "jsx-quotes": [2, "prefer-single"],
+    "jsx-quotes": [2, "prefer-single"]
   }
-};
+}

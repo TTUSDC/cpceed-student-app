@@ -11,7 +11,7 @@ import UserIcon from 'grommet/components/icons/base/User';
 import Anchor from 'grommet/components/Anchor';
 
 import { AuthStates } from 'redux/actions.js';
-import AuthContainer from 'components/Auth/AuthContainer.jsx';
+import AuthContainer from 'containers/Auth';
 
 function NavBar(props) {
   let authView = null;

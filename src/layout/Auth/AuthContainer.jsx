@@ -8,28 +8,22 @@ import {
   AuthStates,
 } from 'redux/actions.js';
 import logger from 'logger.js';
-import Auth from './Auth.jsx';
+import { Auth } from './components';
 
 class AuthContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      logErr: '',
-      regErr: '',
-      waiting: false,
-    };
+  state = {
+    logErr: '',
+    regErr: '',
+    waiting: false,
+  };
 
-    /*
-      Only functions that are being passed out of this scope, as in the case
-      of passing props to children, need to be bound. This ensures that they
-      can still access the scope of this component even though they are
-      being called from another component.
-    */
-    this.handleRegister = this.handleRegister.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
-  }
-
-  handleRegister(data) {
+  /*
+    Only functions that are being passed out of this scope, as in the case
+    of passing props to children, need to be bound. This ensures that they
+    can still access the scope of this component even though they are
+    being called from another component.
+  */
+  handleRegister = (data) => {
     this.setState({
       waiting: true,
       regErr: '',
@@ -72,7 +66,7 @@ class AuthContainer extends React.Component {
       });
   }
 
-  handleLogin(email, password) {
+  handleLogin = (email, password) => {
     this.setState({
       waiting: true,
       logErr: '',

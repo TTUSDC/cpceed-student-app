@@ -2,17 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import AuthContainer from './AuthContainer.jsx';
+import { AuthContainer } from 'containers/Auth';
 
 const requireAuth = (WrappedComponent, requiredState) => {
   class AuthWrapper extends WrappedComponent {
-    constructor(props) {
-      super(props);
-
-      this.authCancelled = this.authCancelled.bind(this);
-    }
-
-    authCancelled() {
+    authCancelled = () => {
       // If signin is cancelled, go back to the previous page
       this.props.history.goBack();
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 import * as firebase from 'firebase';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import update from 'immutability-helper';
 
 import Account from './Account.jsx';

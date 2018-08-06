@@ -5,27 +5,21 @@ import { connect } from 'react-redux';
 
 import * as server from 'server';
 import logger from 'logger.js';
-import NavBar from './NavBar.jsx';
+import { NavBar } from './components';
 
 logger.info('Hello World')
 
 class NavBarContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      auth: false,
-    };
+  state = {
+    auth: false,
+  };
 
-    /*
-      navigate needs to be bound to the context of NavBarContainer to
-      access the router, since it is being called from NavBar.js.
-    */
-    this.navigate = this.navigate.bind(this);
-    this.logout = this.logout.bind(this);
-    this.toggleAuth = this.toggleAuth.bind(this);
-  }
+  /*
+    navigate needs to be bound to the context of NavBarContainer to
+    access the router, since it is being called from NavBar.js.
+  */
 
-  toggleAuth() {
+  toggleAuth = () => {
     this.setState({
       auth: !this.state.auth,
     });
@@ -42,11 +36,11 @@ class NavBarContainer extends React.Component {
     parentheses because they wrap it in a variable, so the function call
     doesn't happen until the variable is called as a function.
   */
-  navigate(url) {
+  navigate = (url) => {
     this.props.history.push(url);
   }
 
-  logout() {
+  logout = () => {
     server.logout()
       .then(() => {
         logger.info('User was logged out');

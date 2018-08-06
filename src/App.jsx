@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import GrommetApp from 'grommet/components/App';
 import Box from 'grommet/components/Box';
 
-import NavBarContainer from 'components/NavBar/NavBarContainer.jsx';
+import NavBarContainer from 'containers/NavBar/NavBarContainer.jsx';
 import Events from 'routes/Events';
 import Activity from 'routes/Activity';
 import Settings from 'routes/Settings';

@@ -6,7 +6,7 @@ import Box from 'grommet/components/Box';
 import Header from 'grommet/components/Header';
 import Button from 'grommet/components/Button';
 
-import RequireAuth from 'components/Auth/RequireAuth.jsx';
+import RequireAuth from 'hoc/RequireAuth.jsx';
 import AccountContainer from '../routes/Account';
 import ProfileContainer from '../routes/Profile';
 

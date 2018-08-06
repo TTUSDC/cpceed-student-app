@@ -25,6 +25,7 @@ class NavBarContainer extends React.Component {
   }
 
   /*
+    TODO: Let redux router handle this so that routing also becomes a function of state
     Navigates by pushing the relative URL to the router.
 
     navigate needs to be wrapped in an arrow function before being passed
@@ -73,8 +74,8 @@ class NavBarContainer extends React.Component {
 NavBarContainer.propTypes = {
   user: PropTypes.shape({}).isRequired,
   history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 // Used by connect to map user to this.props.user

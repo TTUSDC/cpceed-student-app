@@ -11,32 +11,38 @@ import { Activity } from 'pages/Activity';
 import { Settings } from 'pages/Settings';
 import store from 'redux/store.js';
 
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import blue from '@material-ui/core/colors/blue';
+import red from '@material-ui/core/colors/red';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: blue,
+    secondary: red,
+  },
+});
+
 const App = () => (
   // Provider shares store with components joined by connect()
   <Provider store={store}>
     <HashRouter>
-      <GrommetApp
-        centered={false}
-        inline={false}
-      >
-        <Box full>
-          <NavBarContainer />
+      <MuiThemeProvider theme={theme}>
+        <NavBarContainer />
 
-          {/* Load the events page by default */}
-          <Route
-            exact
-            path='/'
-            render={() => (
-              <Redirect to='/events' />
-            )}
-          />
+        {/* Load the events page by default */}
+        <Route
+          exact
+          path='/'
+          render={() => (
+            <Redirect to='/events' />
+          )}
+        />
 
-          {/* Set the children of the primary component */}
-          <Route path='/events' component={Events} />
-          <Route path='/activity' component={Activity} />
-          <Route path='/settings' component={Settings} />
-        </Box>
-      </GrommetApp>
+      {/* Set the children of the primary component */}
+      <Route path='/events' component={Events} />
+      <Route path='/activity' component={Activity} />
+      <Route path='/settings' component={Settings} />
+    </MuiThemeProvider>
     </HashRouter>
   </Provider>
 );

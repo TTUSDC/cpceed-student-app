@@ -38,11 +38,11 @@ const App = () => (
           )}
         />
 
-      {/* Set the children of the primary component */}
-      <Route path='/events' component={Events} />
-      <Route path='/activity' component={Activity} />
-      <Route path='/settings' component={Settings} />
-    </MuiThemeProvider>
+        {/* Set the children of the primary component */}
+        <Route path='/events' component={Events} />
+        <Route path='/activity' component={Activity} />
+        <Route path='/settings' component={Settings} />
+      </MuiThemeProvider>
     </HashRouter>
   </Provider>
 );

@@ -5,10 +5,10 @@ import { Provider } from 'react-redux';
 import GrommetApp from 'grommet/components/App';
 import Box from 'grommet/components/Box';
 
-import NavBarContainer from 'containers/NavBar/NavBarContainer.jsx';
-import Events from 'routes/Events';
-import Activity from 'routes/Activity';
-import Settings from 'routes/Settings';
+import NavBarContainer from 'layout/NavBar/NavBarContainer.jsx';
+import { Events } from 'pages/Events';
+import { Activity } from 'pages/Activity';
+import { Settings } from 'pages/Settings';
 import store from 'redux/store.js';
 
 const App = () => (

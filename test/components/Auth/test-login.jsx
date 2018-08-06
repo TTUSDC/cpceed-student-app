@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import Login from 'components/Auth/Login.jsx';
+import Login from 'layout/Auth/components/Login.jsx';
 
 describe('Login.jsx', () => {
   let props;

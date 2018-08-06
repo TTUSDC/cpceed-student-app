@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import Profile from 'routes/Settings/routes/Profile/components/Profile.jsx';
+import Profile from 'pages/Settings/routes/Profile/components/Profile.jsx';
 
 describe('Profile.jsx', () => {
   let props;

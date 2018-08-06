@@ -10,7 +10,7 @@
   "scripts": {
     "build": "webpack --env=prod",
     "dev": "webpack-dev-server --env=dev",
-    "test": "jest test",
+    "test": "karma start karma.conf.js",
     "lint": "node_modules/.bin/eslint src test",
     "docs": "node_modules/.bin/esdoc"
   },
@@ -43,6 +43,7 @@
     "babel-core": "6.21.0",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "1.7.0",
+    "babel-preset-flow": "6.23.0",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
     "chai": "3.5.0",

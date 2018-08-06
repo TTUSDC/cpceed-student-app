@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import { Settings } from 'routes/Settings/components/Settings.jsx';
+import { Settings } from 'pages/Settings/components/Settings.jsx';
 
 describe('Settings.jsx', () => {
   it('Pushes to the router', () => {

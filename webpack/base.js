@@ -3,7 +3,8 @@ const path = require('path');
 const nodePath = path.resolve(__dirname, '../node_modules');
 const commonPath = path.resolve(__dirname, '../common');
 const appPath = path.resolve(__dirname, '../src');
-const buildPath = path.resolve(__dirname, '../build');
+
+const testPath = path.resolve(__dirname, '../test/config');
 
 const base = {
   // Allows for absolute paths from locations indicated in 'root'
@@ -11,7 +12,8 @@ const base = {
     modules: [
       nodePath,
       appPath,
-      commonPath
+      commonPath,
+      testPath
     ]
   },
 

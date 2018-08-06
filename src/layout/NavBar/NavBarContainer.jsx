@@ -7,9 +7,8 @@ import * as server from 'server';
 import logger from 'logger.js';
 import { NavBar } from './components';
 
-logger.info('Hello World')
 
-class NavBarContainer extends React.Component {
+class NavBarContainer extends React.Component<Props> {
   state = {
     auth: false,
   };
@@ -74,8 +73,8 @@ class NavBarContainer extends React.Component {
 NavBarContainer.propTypes = {
   user: PropTypes.shape({}).isRequired,
   history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
+      push: PropTypes.func.isRequired,
+    }).isRequired,
 };
 
 // Used by connect to map user to this.props.user

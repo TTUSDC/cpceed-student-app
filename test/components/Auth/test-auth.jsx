@@ -1,8 +1,9 @@
+require('setup.js');
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
-import Auth from 'components/Auth/Auth.jsx';
+import Auth from 'layout/Auth/components/Auth.jsx';
 
 describe('Auth.jsx', () => {
   it('Changes tabs', () => {

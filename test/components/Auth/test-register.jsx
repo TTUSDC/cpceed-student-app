@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import Register from 'components/Auth/Register.jsx';
+import Register from 'layout/Auth/components/Register.jsx';
 
 describe('Register.jsx', () => {
   let props;

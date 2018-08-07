@@ -13,9 +13,9 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
-const nodePath = path.resolve(__dirname, '../../node_modules');
-const commonPath = path.resolve(__dirname, '../../common');
-const appPath = path.resolve(__dirname, '../../src');
+const nodePath = path.resolve(__dirname, '../node_modules');
+const commonPath = path.resolve(__dirname, '../common');
+const appPath = path.resolve(__dirname, '../src');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -54,19 +54,11 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths
 // It compiles slowly and is focused on producing a fast and minimal bundle.
 // The development configuration is different and lives in a separate file.
 module.exports = {
-  // Allows for absolute paths from locations indicated in 'root'
-  resolve: {
-    modules: [
-      nodePath,
-      appPath,
-      commonPath,
-    ],
-  },
   // Don't attempt to continue if there are any errors.
   bail: true,
   // We generate sourcemaps in production. This is slow but gives good results.
   // You can exclude the *.map files from the build during deployment.
-  devtool: shouldUseSourceMap ? 'source-map' : false,
+  devtool: false,
   // In production, we only want to load the polyfills and the app code.
   entry: [require.resolve('./polyfills'), paths.appIndexJs],
   output: {
@@ -90,7 +82,13 @@ module.exports = {
     // We placed these paths second because we want `node_modules` to "win"
     // if there are any conflicts. This matches Node resolution mechanism.
     // https://github.com/facebookincubator/create-react-app/issues/253
-    modules: ['node_modules', paths.appNodeModules].concat(
+    modules: [
+      'node_modules',
+      paths.appNodeModules,
+      nodePath,
+      appPath,
+      commonPath
+    ].concat(
       // It is guaranteed to exist because we tweak it in `env.js`
       process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
     ),
@@ -108,9 +106,6 @@ module.exports = {
       'react-native': 'react-native-web',
     },
     plugins: [
-      new webpack.DefinePlugin({
-        ENV: JSON.stringify('prod'),
-      }),
       // Prevents users from importing files from outside of src/ (or node_modules/).
       // This often causes confusion because we only process files within src/ with babel.
       // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
@@ -276,7 +271,10 @@ module.exports = {
     // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
     // It is absolutely essential that NODE_ENV was set to production here.
     // Otherwise React will be compiled in the very slow development mode.
-    new webpack.DefinePlugin(env.stringified),
+    new webpack.DefinePlugin({
+      ENV: JSON.stringify('prod'),
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
     // Minify the code.
     new webpack.optimize.UglifyJsPlugin({
       compress: {

@@ -7,28 +7,21 @@ import Footer from 'grommet/components/Footer';
 import Button from 'grommet/components/Button';
 
 class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-    };
+  state = {
+    email: '',
+    password: '',
+  };
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+  handleInputChange = (event) => {
+    const { target } = event;
+    const { value, name } = target;
 
     this.setState({
       [name]: value,
     });
   }
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     // This prevents a '?' from being appended to the URL
     event.preventDefault();
     this.props.handleLogin(this.state.email, this.state.password);
@@ -36,9 +29,12 @@ class Login extends React.Component {
 
   render() {
     let errMessage = null;
-    if (this.props.logErr !== '') {
+    const { logErr } = this.props;
+    if (logErr !== '') {
       errMessage = (
-        <span style={{ color: 'red' }}>{this.props.logErr}</span>
+        <span style={{ color: 'red' }}>
+          {logErr}
+        </span>
       );
     }
 

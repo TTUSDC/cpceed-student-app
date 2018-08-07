@@ -11,16 +11,7 @@ import AccountContainer from '../routes/Account';
 import ProfileContainer from '../routes/Profile';
 
 class Settings extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      index: 0,
-    };
-
-    this.navigate = this.navigate.bind(this);
-  }
-
-  navigate(url) {
+  navigate = (url) => {
     this.props.history.push(url);
   }
 

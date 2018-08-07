@@ -1,15 +1,15 @@
 export const checkEmail = (email) => {
-  var output = '';
+  let output = '';
 
   if(/@ttu.edu$/.test(email) !== true) {
     output = 'Please use a TTU email address.';
   }
 
   return output;
-}
+};
 
 export const checkPass = (password) => {
-  var output = '';
+  let output = '';
 
   if(/^[\x00-\x7F]+$/.test(password) !== true) {
     // ASCII only
@@ -32,24 +32,24 @@ export const checkPass = (password) => {
   }
 
   return output;
-}
+};
 
 export const checkConfirm = (password, confirm) => {
-  var output = '';
+  let output = '';
 
   if(password !== confirm) {
     output = 'Please enter a matching password.';
   }
 
   return output;
-}
+};
 
 export const checkID = (studentID) => {
-  var output = '';
+  let output = '';
 
   if(/^[0-9]{8}$/.test(studentID) !== true) {
     output = 'Please use 8 numbers.';
   }
 
   return output;
-}
+};

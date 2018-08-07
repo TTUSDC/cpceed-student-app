@@ -11,45 +11,47 @@ import Button from 'grommet/components/Button';
 class Profile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      name: this.props.name,
-    };
-
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    const { name } = this.props;
+    this.state = { name };
   }
 
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+  handleInputChange = (event) => {
+    const { target } = event;
+    const { value, name } = target;
 
     this.setState({
       [name]: value,
     });
   }
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     // This prevents a '?' from being appended to the URL
     event.preventDefault();
+    const { name, handleSubmit } = this.props;
+    const { name: StateName } = this.state;
 
-    if (this.props.name !== this.state.name) {
-      this.props.handleSubmit({
-        name: this.state.name,
+    if (name !== StateName) {
+      handleSubmit({
+        name: StateName,
       });
     }
   }
 
   render() {
+    const { proErr, waiting } = this.props;
+    const { name } = this.state;
+
     let errMessage = null;
-    if (this.props.proErr !== '') {
+    if (proErr !== '') {
       errMessage = (
-        <span style={{ color: 'red' }}>{this.props.proErr}</span>
+        <span style={{ color: 'red' }}>
+          {proErr}
+        </span>
       );
     }
 
     let passHandleSubmit = this.handleSubmit;
-    if (this.props.waiting === true) {
+    if (waiting === true) {
       passHandleSubmit = null;
     }
 
@@ -72,7 +74,7 @@ class Profile extends React.Component {
               <input
                 name='name'
                 type='text'
-                value={this.state.name}
+                value={name}
                 onChange={this.handleInputChange}
               />
             </FormField>

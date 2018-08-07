@@ -2,9 +2,6 @@ import React from 'react';
 import { HashRouter, Route, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import GrommetApp from 'grommet/components/App';
-import Box from 'grommet/components/Box';
-
 import NavBarContainer from 'layout/NavBar/NavBarContainer.jsx';
 import { Events } from 'pages/Events';
 import { Activity } from 'pages/Activity';

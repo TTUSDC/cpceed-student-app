@@ -20,6 +20,7 @@ module.exports = {
 
     "jsx-quotes": [2, "prefer-single"],
 
+    // For some reason, these lint errors came up and they were extreme style linting errors
     "react/jsx-filename-extension": 0,
     "react/destructuring-assignment": 0,
     "react/no-access-state-in-setstate": 0,

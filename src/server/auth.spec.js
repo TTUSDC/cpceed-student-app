@@ -4,12 +4,12 @@ import store from 'redux/store.js';
 import Connection from 'server/core/connection';
 import { AuthStates } from 'redux/actions';
 import { login, logout } from 'server/user-auth';
-import { user38257001 as testUser } from './core/users';
+import { user38257001 as testUser } from './core/utils/users.mock';
 
 const sinonChai = require('sinon-chai');
 const chai = require('chai');
 
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 const expect = chai.expect;
 chai.use(sinonChai);
 

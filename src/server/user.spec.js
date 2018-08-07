@@ -1,15 +1,20 @@
 import sinon from 'sinon';
 
-import { createUser, deleteUser, modifyUser, getUser } from 'server/user';
+import {
+  createUser,
+  deleteUser,
+  modifyUser,
+  getUser,
+} from 'server/user';
 import Connection from 'server/core/connection';
-import { user38257001 as testUser } from './core/users';
+import { user38257001 as testUser } from './core/utils/users.mock';
 
 const sinonChai = require('sinon-chai');
 const chai = require('chai');
 
 chai.use(sinonChai);
-const expect = chai.expect;
-const sandbox = sinon.sandbox.create();
+const { expect } = chai;
+const sandbox = sinon.createSandbox();
 
 export default describe('Server API: User', () => {
   beforeEach(() => {

@@ -8,15 +8,15 @@ import {
   getReport,
   getAllReports,
 } from 'server/reports';
-import { user38257001 as testUser } from './core/users';
-import { generateOtherReportData } from '../core/reports';
+import { user38257001 as testUser } from './core/utils/users.mock';
+import { generateOtherReportData } from './core/utils/reports.mock';
 
 const sinonChai = require('sinon-chai');
 const chai = require('chai');
 
 chai.use(sinonChai);
 const expect = chai.expect;
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 export default describe('Server API: Reports', () => {
   beforeEach(() => {

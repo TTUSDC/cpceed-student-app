@@ -8,15 +8,15 @@ import {
   getEvent,
   getAllEvents,
 } from 'server/events';
-import { user38257001 as testUser } from './core/users';
-import { generateEventData } from '../core/events';
+import { user38257001 as testUser } from './core/utils/users.mock';
+import { generateEventData } from './core/utils/events.mock';
 
 const sinonChai = require('sinon-chai');
 const chai = require('chai');
 
 chai.use(sinonChai);
-const expect = chai.expect;
-const sandbox = sinon.sandbox.create();
+const { expect } = chai;
+const sandbox = sinon.createSandbox();
 
 export default describe('Server API: Events', () => {
   beforeEach(() => {

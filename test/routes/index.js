@@ -1,1 +1,0 @@
-import settingsTests from './Settings';

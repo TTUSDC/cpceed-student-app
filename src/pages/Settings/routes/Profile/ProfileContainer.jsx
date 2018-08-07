@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as server from 'server';
 import { updateUser } from 'redux/actions.js';
 import logger from 'logger.js';
-import Profile from './Profile.jsx';
+import { Profile } from './components';
 
 class ProfileContainer extends React.Component {
   constructor(props) {

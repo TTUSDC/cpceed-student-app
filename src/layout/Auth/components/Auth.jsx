@@ -26,17 +26,30 @@ class Auth extends React.Component {
   }
 
   render() {
+    const {
+      authCancelled,
+      handleLogin,
+      handleRegister,
+      regErr,
+      waiting,
+      logErr,
+    } = this.props;
+
+    const {
+      index,
+    } = this.state;
+
     return (
       <Layer
         closer
         flush={false}
         align='center'
         onClose={() => {
-          this.props.authCancelled();
+          authCancelled();
         }}
       >
         <Tabs
-          activeIndex={this.state.index}
+          activeIndex={index}
           justify='center'
           responsive={false}
           onActive={(event) => {
@@ -45,16 +58,16 @@ class Auth extends React.Component {
         >
           <Tab title='Login'>
             <Login
-              handleLogin={this.props.handleLogin}
-              logErr={this.props.logErr}
-              waiting={this.props.waiting}
+              handleLogin={handleLogin}
+              logErr={logErr}
+              waiting={waiting}
             />
           </Tab>
           <Tab title='Register'>
             <Register
-              handleRegister={this.props.handleRegister}
-              regErr={this.props.regErr}
-              waiting={this.props.waiting}
+              handleRegister={handleRegister}
+              regErr={regErr}
+              waiting={waiting}
             />
           </Tab>
         </Tabs>

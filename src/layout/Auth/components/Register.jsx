@@ -37,7 +37,7 @@ class Register extends React.Component {
     this.inputChecking = this.inputChecking.bind(this);
   }
 
-  handlePasswordChange(event) {
+  handlePasswordChange = (event) => {
     this.setState({
       password: event.target.value,
       confirmPass: '',
@@ -47,26 +47,25 @@ class Register extends React.Component {
     });
   }
 
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+  handleInputChange = (event) => {
+    const { target } = event;
+    const { value, name } = target;
 
     this.setState({
       [name]: value,
     });
   }
 
-  handleSelectChange(event) {
-    const name = event.target.name;
-    const option = event.option;
+  handleSelectChange = (event) => {
+    const { name } = event.target;
+    const { option } = event;
 
     this.setState({
       [name]: option,
     });
   }
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     // This prevents a '?' from being appended to the URL
     event.preventDefault();
 
@@ -78,8 +77,8 @@ class Register extends React.Component {
     });
   }
 
-  handleFocus(event) {
-    const name = event.target.name;
+  handleFocus = (event) => {
+    const { name } = event.target;
 
     switch (name) {
       case 'email':
@@ -118,7 +117,7 @@ class Register extends React.Component {
   }
 
   inputChecking(event) {
-    const name = event.target.name;
+    const { name } = event.target;
     let value = null;
 
     switch (name) {

@@ -111,10 +111,4 @@ NavBar.propTypes = {
   logout: PropTypes.func.isRequired,
 };
 
-NavBar.defaultProps = {
-  user: {
-    name: '',
-  },
-};
-
 export default NavBar;

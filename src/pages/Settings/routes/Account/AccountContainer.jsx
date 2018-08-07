@@ -2,60 +2,54 @@ import React from 'react';
 import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
-
-import { Account } from './components';
-import { updateUser } from 'redux/actions.js';
 import logger from 'logger.js';
+import PropTypes from 'prop-types';
+
+import { updateUser } from 'redux/actions.js';
+import { Account } from './components';
 
 class AccountContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      err: {
-        email: '',
-        password: ''
-      },
-      waiting: {
-        email: false,
-        password: false
-      }
-    };
+  state = {
+    err: {
+      email: '',
+      password: '',
+    },
+    waiting: {
+      email: false,
+      password: false,
+    },
+  };
 
-    this.handlePassword = this.handlePassword.bind(this);
-    this.handleEmail = this.handleEmail.bind(this);
-  }
-
-  handlePassword(password, old) {
+  handlePassword = (password, old) => { // eslint-disable-line no-unused-vars
     // TODO (Nils) utilize the old password
-
     this.setState({
       waiting: update(this.state.waiting, {
-        password: {$set: true}
+        password: { $set: true },
       }),
       err: update(this.state.err, {
-        password: {$set: ''}
-      })
+        password: { $set: '' },
+      }),
     });
 
-    var user = firebase.auth().currentUser;
+    const user = firebase.auth().currentUser;
     user.updatePassword(password)
       .then(() => {
         logger.info('Password was changed');
         this.setState({
           waiting: update(this.state.waiting, {
-            password: {$set: false}
-          })
+            password: { $set: false },
+          }),
         });
       })
       .catch((e) => {
         logger.error(e.message);
         this.setState({
           waiting: update(this.state.waiting, {
-            password: {$set: false}
+            password: { $set: false },
           }),
           err: update(this.state.err, {
-            password: {$set: e.message}
-          })
+            password: { $set: e.message },
+          }),
         });
       });
   }
@@ -63,44 +57,42 @@ class AccountContainer extends React.Component {
   handleEmail(email) {
     this.setState({
       waiting: update(this.state.waiting, {
-        email: {$set: true}
+        email: { $set: true },
       }),
       err: update(this.state.err, {
-        email: {$set: ''}
-      })
+        email: { $set: '' },
+      }),
     });
 
-    var user = firebase.auth().currentUser;
-    const userRef = firebase.database().ref().child('users/' + user.uid);
+    const user = firebase.auth().currentUser;
+    const userRef = firebase.database().ref().child(`users/${user.uid}`);
 
     user.updateEmail(email)
-      .then(() => {
-        return userRef.update({
-          email: email
-        });
-      })
+      .then(() => userRef.update({
+        email,
+      }))
       .then(() => {
         logger.info('Email was updated');
 
-        var newUser = this.props.user;
+        const { user: newUser } = this.props;
         newUser.email = email;
         this.props.dispatch(updateUser(newUser));
 
         this.setState({
           waiting: update(this.state.waiting, {
-            email: {$set: false}
-          })
+            email: { $set: false },
+          }),
         });
       })
       .catch((e) => {
         logger.error(e.message);
         this.setState({
           waiting: update(this.state.waiting, {
-            email: {$set: false}
+            email: { $set: false },
           }),
           err: update(this.state.err, {
-            email: {$set: e.message}
-          })
+            email: { $set: e.message },
+          }),
         });
       });
   }
@@ -112,19 +104,21 @@ class AccountContainer extends React.Component {
         handleEmail={this.handleEmail}
         user={this.props.user}
         waiting={this.state.waiting}
-        err={this.state.err}/>
+        err={this.state.err}
+      />
     );
   }
 }
 
-const getUser = (user) => {
-  return user;
-}
+AccountContainer.propTypes = {
+  user: PropTypes.shape({}).isRequired,
+  dispatch: PropTypes.func.isRequired,
+};
 
-const mapStateToProps = (state) => {
-  return {
-    user: getUser(state.user)
-  }
-}
+const getUser = user => user;
+
+const mapStateToProps = state => ({
+  user: getUser(state.user),
+});
 
 export default connect(mapStateToProps)(AccountContainer);

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import logger from 'logger.js';
 
-if (ENV === 'dev') {
+
+if (ENV === 'dev') { // eslint-disable-line no-undef
   // Ensures session cookie is stored and sent with requests during dev
   axios.defaults.withCredentials = true;
 }
@@ -35,13 +36,13 @@ instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlenco
  */
 const errorHandler = (err, onError) => {
   if (err.response) {
-        // Server responded with a status code outside 2xx range.
+    // Server responded with a status code outside 2xx range.
     logger.error(err.response, 'Response error');
   } else if (err.request) {
-        // No response recieved
+    // No response recieved
     logger.error(err.request, 'No response recieved');
   } else {
-        // Who knows
+    // Who knows
     logger.error(err.message, 'Request error');
   }
   onError(err);
@@ -62,7 +63,6 @@ const errorHandler = (err, onError) => {
  *   });
  */
 export default class Connection {
-
   constructor() {
     this.config = {
       data: {},

@@ -18,29 +18,19 @@ import {
 import logger from 'logger.js';
 
 class Account extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+  state = {
+    password: '',
+    confirm: '',
+    old: '',
+    email: this.props.user.email,
+    err: {
       password: '',
       confirm: '',
-      old: '',
-      email: this.props.user.email,
-      err: {
-        password: '',
-        confirm: '',
-        email: '',
-      },
-    };
+      email: '',
+    },
+  };
 
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handlePassword = this.handlePassword.bind(this);
-    this.handleEmail = this.handleEmail.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-    this.inputChecking = this.inputChecking.bind(this);
-  }
-
-  handlePasswordChange(event) {
+  handlePasswordChange = (event) => {
     this.setState({
       password: event.target.value,
       confirm: '',
@@ -50,29 +40,28 @@ class Account extends React.Component {
     });
   }
 
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+  handleInputChange = (event) => {
+    const { target } = event;
+    const { value, name } = target;
 
     this.setState({
       [name]: value,
     });
   }
 
-  handlePassword(event) {
+  handlePassword = (event) => {
     // This prevents a '?' from being appended to the URL
     event.preventDefault();
     this.props.handlePassword(this.state.password, this.state.old);
   }
 
-  handleEmail(event) {
+  handleEmail = (event) => {
     event.preventDefault();
     this.props.handleEmail(this.state.email);
   }
 
-  handleFocus(event) {
-    const name = event.target.name;
+  handleFocus = (event) => {
+    const { name } = event.target;
 
     switch (name) {
       case 'password':
@@ -110,8 +99,8 @@ class Account extends React.Component {
     }
   }
 
-  inputChecking(event) {
-    const name = event.target.name;
+  inputChecking = (event) => {
+    const { name } = event.target;
     let value = null;
 
     switch (name) {

@@ -12,6 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
 import { ModalView } from 'components/';
+import AuthContainer from 'layout/Auth';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -136,7 +137,10 @@ export class NavBar extends React.Component {
                 : <MenuButton />
             }
             <ModalView open={auth} toggle={this.toggleModal}>
-              <h1>Hello World!</h1>
+              <AuthContainer
+                authCancelled={this.toggleAuth}
+                authFinished={this.toggleAuth}
+              />
             </ModalView>
           </Toolbar>
         </AppBar>

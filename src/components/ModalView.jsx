@@ -1,19 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Modal from '@material-ui/core/Modal';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     display: 'flex',
     textAlign: 'center',
-  },
-  paper: {
-    margin: '48px',
-    width: '100%',
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: '32px',
   },
 });
 
@@ -26,18 +21,22 @@ export const ModalView = (props) => {
     classes,
     children,
     toggle,
+    fullScreen,
   } = props;
 
   return (
-    <Modal
+    // Make it fullscreen and allow for the user to quit in mobile
+    <Dialog
+      fullScreen={fullScreen}
       open={open}
       className={classes.root}
       onClose={toggle}
     >
-      <div className={classes.paper}>
+      <DialogContent>
+        {/* For forms you want to render a DialogContentText along with a Input component */}
         {children}
-      </div>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -51,9 +50,11 @@ ModalView.propTypes = {
   classes: PropTypes.shape({}).isRequired,
   // Content of the Modal
   children: PropTypes.shape({}),
+  // Will change to true when screen is bellow sm breakpoint
+  fullScreen: PropTypes.bool.isRequired,
 };
 
 ModalView.defaultProps = {
   children: null,
 };
-export default withStyles(styles)(ModalView);
+export default withStyles(styles)(withMobileDialog()(ModalView));

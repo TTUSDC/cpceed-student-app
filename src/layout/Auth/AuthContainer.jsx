@@ -17,13 +17,8 @@ class AuthContainer extends React.Component {
     waiting: false,
   };
 
-  /*
-    Only functions that are being passed out of this scope, as in the case
-    of passing props to children, need to be bound. This ensures that they
-    can still access the scope of this component even though they are
-    being called from another component.
-  */
   handleRegister = (data) => {
+    const { COORDINATOR, STUDENT } = AuthStates;
     this.setState({
       waiting: true,
       regErr: '',
@@ -31,10 +26,10 @@ class AuthContainer extends React.Component {
 
     let userData;
     switch (data.role) {
-      case AuthStates.COORDINATOR:
+      case COORDINATOR:
         userData = coordinator;
         break;
-      case AuthStates.STUDENT:
+      case STUDENT:
         userData = student;
         break;
       default:

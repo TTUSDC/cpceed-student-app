@@ -1,25 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Layer from 'grommet/components/Layer';
-import Tabs from 'grommet/components/Tabs';
-import Tab from 'grommet/components/Tab';
+// import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 import logger from 'logger.js';
 import Login from './Login.jsx';
 import Register from './Register.jsx';
 
 class Auth extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      index: 0,
-    };
+  state = {
+    index: 'one',
+  };
 
-    this.handleTabChange = this.handleTabChange.bind(this);
-  }
-
-  handleTabChange(newIndex) {
+  handleTabChange = (event, newIndex) => {
     this.setState({
       index: newIndex,
     });
@@ -27,7 +22,6 @@ class Auth extends React.Component {
 
   render() {
     const {
-      authCancelled,
       handleLogin,
       handleRegister,
       regErr,
@@ -40,38 +34,34 @@ class Auth extends React.Component {
     } = this.state;
 
     return (
-      <Layer
-        closer
-        flush={false}
-        align='center'
-        onClose={() => {
-          authCancelled();
-        }}
-      >
+      <div>
         <Tabs
-          activeIndex={index}
-          justify='center'
-          responsive={false}
-          onActive={(event) => {
-            this.handleTabChange(event);
-          }}
+          value={index}
+          onChange={this.handleTabChange}
+          fullWidth
         >
-          <Tab title='Login'>
-            <Login
-              handleLogin={handleLogin}
-              logErr={logErr}
-              waiting={waiting}
-            />
-          </Tab>
-          <Tab title='Register'>
-            <Register
+          <Tab value='one' label='Register' />
+          <Tab value='two' label='Login' />
+        </Tabs>
+
+        {/* Content for the Tabs */}
+        {
+          index === 'one'
+            && <Register
               handleRegister={handleRegister}
               regErr={regErr}
               waiting={waiting}
             />
-          </Tab>
-        </Tabs>
-      </Layer>
+        }
+        {
+          index === 'two'
+            && <Login
+              handleLogin={handleLogin}
+              logErr={logErr}
+              waiting={waiting}
+            />
+        }
+      </div>
     );
   }
 }
@@ -79,7 +69,6 @@ class Auth extends React.Component {
 Auth.propTypes = {
   handleRegister: PropTypes.func,
   handleLogin: PropTypes.func,
-  authCancelled: PropTypes.func.isRequired,
   regErr: PropTypes.string,
   logErr: PropTypes.string,
   waiting: PropTypes.bool,

@@ -5,24 +5,9 @@ import { connect } from 'react-redux';
 
 import * as server from 'server';
 import logger from 'logger.js';
-import { NavBar } from './components';
+import NavBar from './components';
 
 class NavBarContainer extends React.Component {
-  state = {
-    auth: false,
-  };
-
-  /*
-    navigate needs to be bound to the context of NavBarContainer to
-    access the router, since it is being called from NavBar.js.
-  */
-
-  toggleAuth = () => {
-    this.setState({
-      auth: !this.state.auth,
-    });
-  }
-
   /*
     TODO: Let redux router handle this so that routing also becomes a function of state
     Navigates by pushing the relative URL to the router.
@@ -40,6 +25,7 @@ class NavBarContainer extends React.Component {
   }
 
   logout = () => {
+    logger.info('Logging out...');
     server.logout()
       .then(() => {
         logger.info('User was logged out');
@@ -60,8 +46,6 @@ class NavBarContainer extends React.Component {
         from NavBar.js, the context switches back to NavBarContainer.js.
       */
       <NavBar
-        toggleAuth={this.toggleAuth}
-        auth={this.state.auth}
         user={this.props.user}
         navigate={this.navigate}
         logout={this.logout}

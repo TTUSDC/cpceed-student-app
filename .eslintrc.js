@@ -27,5 +27,6 @@ module.exports = {
     "react/prefer-stateless-function": 0,
     "react/jsx-one-expression-per-line": 0,
     "react/jsx-wrap-multilines": 0,
+    "react/require-default-props": 0,
   }
 }

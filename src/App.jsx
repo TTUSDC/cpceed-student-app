@@ -1,11 +1,12 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
 import { HashRouter, Route, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import NavBarContainer from 'layout/NavBar/NavBarContainer.jsx';
-import { Events } from 'pages/Events';
-import { Activity } from 'pages/Activity';
-import { Settings } from 'pages/Settings';
+import NavBarContainer from 'layout/NavBar';
+import Events from 'pages/Events';
+import Activity from 'pages/Activity';
+import Settings from 'pages/Settings';
 import store from 'redux/store.js';
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
@@ -44,4 +45,4 @@ const App = () => (
   </Provider>
 );
 
-export default App;
+export default hot(module)(App);

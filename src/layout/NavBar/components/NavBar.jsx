@@ -109,7 +109,7 @@ export class NavBar extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar>
+        <AppBar position='fixed'>
           <Toolbar>
             <IconButton onClick={this.toggleOpenMenu} color='inherit'>
               <MenuIcon />
@@ -129,7 +129,7 @@ export class NavBar extends React.Component {
               </MenuItem>
             </Menu>
             <Typography className={classes.flex} variant='title' color='inherit'>
-              CPCEED
+              CPCEED!
             </Typography>
             {
               this.props.user.role === GUEST

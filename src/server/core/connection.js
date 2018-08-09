@@ -2,7 +2,7 @@ import axios from 'axios';
 import logger from 'logger.js';
 
 
-if (ENV === 'dev') { // eslint-disable-line no-undef
+if (process.env.NODE_ENV === 'dev') { // eslint-disable-line no-undef
   // Ensures session cookie is stored and sent with requests during dev
   axios.defaults.withCredentials = true;
 }

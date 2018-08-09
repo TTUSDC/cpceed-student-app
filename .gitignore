@@ -10,7 +10,7 @@
 /build
 
 # Docs
-./docs/
+/docs
 
 # misc
 .DS_Store

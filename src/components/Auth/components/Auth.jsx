@@ -38,6 +38,8 @@ class Auth extends React.Component {
         <Tabs
           value={index}
           onChange={this.handleTabChange}
+          indicatorColor='primary'
+          textColor='primary'
           fullWidth
         >
           <Tab value='one' label='Register' />

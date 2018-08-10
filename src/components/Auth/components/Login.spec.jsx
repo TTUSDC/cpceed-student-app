@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import Login from 'layout/Auth/components/Login.jsx';
+import Login from './Login.jsx';
 
 describe('Login.jsx', () => {
   let props;
@@ -34,8 +34,8 @@ describe('Login.jsx', () => {
     const wrapper = shallow(<Login {...props} />);
 
     expect(wrapper.contains(
-      <span style={{ color: 'red' }}>{props.logErr}</span>),
-    ).to.equal(true);
+      <span style={{ color: 'red' }}>{props.logErr}</span>,
+    )).to.equal(true);
   });
 
   it('Disables submit while waiting for server', () => {

@@ -7,7 +7,7 @@ import Auth from './Auth.jsx';
 describe('Auth.jsx', () => {
   it('Changes tabs', () => {
     const authTest = shallow(<Auth authCancelled={() => {}} />);
-    authTest.instance().handleTabChange(1);
-    expect(authTest.state().index).to.equal(1);
+    authTest.instance().handleTabChange(null, 'two');
+    expect(authTest.state().index).to.equal('two');
   });
 });

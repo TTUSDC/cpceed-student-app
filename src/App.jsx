@@ -1,12 +1,10 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import { HashRouter, Route, Redirect } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import NavBarContainer from 'layout/NavBar';
-import Events from 'pages/Events';
-import Activity from 'pages/Activity';
-import Settings from 'pages/Settings';
+import ContentContainer from 'layout/Content';
 import store from 'redux/store.js';
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
@@ -26,20 +24,7 @@ const App = () => (
     <HashRouter>
       <MuiThemeProvider theme={theme}>
         <NavBarContainer />
-
-        {/* Load the events page by default */}
-        <Route
-          exact
-          path='/'
-          render={() => (
-            <Redirect to='/events' />
-          )}
-        />
-
-        {/* Set the children of the primary component */}
-        <Route path='/events' component={Events} />
-        <Route path='/activity' component={Activity} />
-        <Route path='/settings' component={Settings} />
+        <ContentContainer />
       </MuiThemeProvider>
     </HashRouter>
   </Provider>

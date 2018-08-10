@@ -23,7 +23,6 @@ class Login extends React.Component {
   }
 
   handleSubmit = () => {
-    // This prevents a '?' from being appended to the URL
     if (!this.props.waiting) {
       this.props.handleLogin(this.state.email, this.state.password);
     }

@@ -39,7 +39,7 @@ export const ModalView = (props) => {
         {children}
       </DialogContent>
       <DialogActions>
-        {/* Closes the Modal when you click the close button hit Esc */}
+        {/* Closes the Modal when you click the close button or hit Esc */}
         <Button className='close-button' onClick={toggle}>
           Close
         </Button>

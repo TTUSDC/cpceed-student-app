@@ -6,7 +6,7 @@ import { mount } from 'enzyme';
 import { ModalView } from 'components/';
 import { NavBar } from './NavBar.jsx';
 
-describe.only('NavBar Component', () => {
+describe('NavBar Component', () => {
   let wrapper;
   const initProps = {
     user: {
@@ -19,7 +19,6 @@ describe.only('NavBar Component', () => {
   };
   it('should close modal when auth state is set to false', () => {
     wrapper = mount(<NavBar {...initProps} />);
-    expect(wrapper.exists()).to.equal(true);
     const modal = wrapper.find(ModalView);
     expect(modal.exists()).to.equal(true);
     expect(modal.props().open).to.equal(false);

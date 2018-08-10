@@ -1,13 +1,8 @@
 import React from 'react';
-import logger from 'logger.js';
 import Content from './components';
 
-const ContentContainer = () => {
-  logger.info('rendering');
-
-  return (
-    <Content />
-  );
-};
+const ContentContainer = () => (
+  <Content />
+);
 
 export default ContentContainer;

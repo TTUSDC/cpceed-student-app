@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
@@ -38,6 +37,9 @@ class Auth extends React.Component {
         <Tabs
           value={index}
           onChange={this.handleTabChange}
+          indicatorColor='primary'
+          textColor='primary'
+          centered
           fullWidth
         >
           <Tab value='one' label='Register' />

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import * as server from 'server';
 import logger from 'logger.js';
-import NavBar from './components';
+import { NavBar } from './components';
 
 class NavBarContainer extends React.Component {
   /*

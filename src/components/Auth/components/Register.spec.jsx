@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import Register from 'layout/Auth/components/Register.jsx';
+import Register from './Register.jsx';
 
 describe('Register.jsx', () => {
   let props;
@@ -216,8 +216,8 @@ describe('Register.jsx', () => {
     const wrapper = shallow(<Register {...props} />);
 
     expect(wrapper.contains(
-      <span style={{ color: 'red' }}>{props.regErr}</span>),
-    ).to.equal(true);
+      <span style={{ color: 'red' }}>{props.regErr}</span>,
+    )).to.equal(true);
   });
 
   it('Disables submit while waiting for server', () => {

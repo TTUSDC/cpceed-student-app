@@ -51,8 +51,8 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "react-app-rewired test --env=jsdom",
-    "eject": "react-app-rewired eject",
+    "test": "jest --silent --env=jsdom",
+    "eject": "react-scripts eject",
     "config": "cp .env.config .env",
     "lint": "eslint src",
     "docs": "esdoc"

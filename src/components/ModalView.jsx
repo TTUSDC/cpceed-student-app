@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -36,6 +38,12 @@ export const ModalView = (props) => {
         {/* For forms you want to render a DialogContentText along with a Input component */}
         {children}
       </DialogContent>
+      <DialogActions>
+        {/* Closes the Modal when you click the close button or hit Esc */}
+        <Button className='close-button' onClick={toggle}>
+          Close
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
@@ -47,7 +55,7 @@ ModalView.propTypes = {
   // Toggles the open state
   toggle: PropTypes.func.isRequired,
   // Material JSS Classes
-  classes: PropTypes.shape({}).isRequired,
+  classes: PropTypes.shape({}),
   // Content of the Modal
   children: PropTypes.shape({}),
   // Will change to true when screen is bellow sm breakpoint
@@ -55,6 +63,6 @@ ModalView.propTypes = {
 };
 
 ModalView.defaultProps = {
-  children: null,
+  children: {},
 };
 export default withStyles(styles)(withMobileDialog()(ModalView));

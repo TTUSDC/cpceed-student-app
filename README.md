@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/TTUSDC/CPCEEDWebApp.svg?branch=master)](https://travis-ci.org/TTUSDC/CPCEEDWebApp)
+[![Build Status](https://travis-ci.org/TTUSDC/cpceed-student-app.svg?branch=master)](https://travis-ci.org/TTUSDC/cpceed-student-app)
 
 # CPCEED Web App
 This is a time logging app for the CPCEED program at Texas Tech University.

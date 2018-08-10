@@ -12,7 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
 import { ModalView } from 'components/';
-import AuthContainer from 'layout/Auth';
+import AuthContainer from 'components/Auth';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -67,11 +67,12 @@ export class NavBar extends React.Component {
     anchorEl: null,
   };
 
+  // Toggles openning and closing the Login prompt
   toggleAuth = () => {
-    this.setState({
+    this.setState(prevState => ({
       ...this.state,
-      auth: !this.state.auth,
-    });
+      auth: !prevState.auth,
+    }));
   }
 
   toggleOpenMenu = (event) => {
@@ -109,7 +110,7 @@ export class NavBar extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position='fixed'>
+        <AppBar position='sticky'>
           <Toolbar>
             <IconButton onClick={this.toggleOpenMenu} color='inherit'>
               <MenuIcon />

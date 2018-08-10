@@ -1,3 +1,4 @@
+/* eslint-disable */
 import update from 'immutability-helper';
 
 import logger from 'logger.js';
@@ -5,10 +6,10 @@ import {
   AuthStates,
   PermissionStates,
   UserActionTypes,
-  guest
+  guest,
 } from './actions.js';
 
-const user = (state = guest, action) => {
+const selectUser = (state = guest, action) => {
   switch(action.type) {
     case UserActionTypes.UPDATE:
       var user = action.user;
@@ -25,26 +26,24 @@ const user = (state = guest, action) => {
           break;
         default:
           logger.error(`Unknown user role ${user.role} in reducers.js`);
-      };
+      }
 
-      return update(state, {$set: user});
+      return update(state, { $set: user });
     case UserActionTypes.LOGOUT:
       var user = action.user;
 
       user.permissions = PermissionStates.GUEST;
 
-      return update(state, {$set: user});
+      return update(state, { $set: user });
     default:
-      state.permissions = PermissionStates.GUEST
+      state.permissions = PermissionStates.GUEST;
 
       return state;
-  };
-}
+  }
+};
 
-const cpceedApp = (state = {}, action) => {
-  return {
-    user: user(state.user, action)
-  };
-}
+const cpceedApp = (state = {}, action) => ({
+  user: selectUser(state.user, action),
+});
 
 export default cpceedApp;

@@ -10,10 +10,10 @@ import Connection from 'server/core/connection';
 export function createUser(newUser) {
   return new Promise((resolve, reject) => {
     new Connection()
-        .post()
-        .users()
-        .data(newUser)
-        .call(resolve, reject);
+      .post()
+      .users()
+      .data(newUser)
+      .call(resolve, reject);
   });
 }
 

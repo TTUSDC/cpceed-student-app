@@ -3,8 +3,7 @@ import { hot } from 'react-hot-loader';
 import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import NavBarContainer from 'layout/NavBar';
-import ContentContainer from 'layout/Content';
+import { NavBarContainer, ContentContainer } from 'layout/';
 import store from 'redux/store.js';
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';

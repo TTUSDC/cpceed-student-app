@@ -10,6 +10,7 @@ import {
 import logger from 'logger.js';
 import { Auth } from './components';
 
+// Handles requests to the server during production and fetching mocks in development
 class AuthContainer extends React.Component {
   state = {
     logErr: '',
@@ -38,6 +39,11 @@ class AuthContainer extends React.Component {
 
     userData.email = data.email;
     userData.name = data.name;
+
+    if (process.env.NODE_ENV) {
+      logger.info('Hi-jacking user data in development. Here is what was passed');
+      logger.info(userData);
+    }
 
     server.createUser(data)
       .then(() => {

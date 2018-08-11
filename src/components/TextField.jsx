@@ -7,10 +7,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 
 // Handles password input changes and errors
-const PasswordField = (props) => {
+const TextField = (props) => {
   const {
     title,
-    name,
+    hide,
+    tag,
     error,
     onNewValue,
     currentValue,
@@ -22,27 +23,29 @@ const PasswordField = (props) => {
     <FormControl
       error={hasError}
     >
-      <InputLabel htmlFor={name}>{title}</InputLabel>
+      <InputLabel htmlFor={tag}>{title}</InputLabel>
       <Input
-        id={name}
+        id={tag}
         value={currentValue}
-        onChange={onNewValue(name)}
+        onChange={onNewValue(tag)}
         inputProps={{
-          type: 'password',
+          type: hide ? 'password' : null,
         }}
       />
-      <FormHelperText display={hasError ? 'none' : null}>
+      <FormHelperText id={`${tag}-error`} display={hasError ? 'none' : null}>
         {error}
       </FormHelperText>
     </FormControl>
   );
 };
 
-PasswordField.propTypes = {
+TextField.propTypes = {
   // Title for the input
   title: PropTypes.string.isRequired,
   // Name of the value to change
-  name: PropTypes.string.isRequired,
+  tag: PropTypes.string.isRequired,
+  // Whether or not to hide the text inside the inputs
+  hide: PropTypes.bool,
   // The role that is currently selected
   currentValue: PropTypes.string.isRequired,
   // A change handler for when the user changes value
@@ -51,8 +54,9 @@ PasswordField.propTypes = {
   error: PropTypes.string,
 };
 
-PasswordField.defaultProps = {
+TextField.defaultProps = {
+  hide: false,
   error: '',
 };
 
-export default PasswordField;
+export default TextField;

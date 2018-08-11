@@ -13,8 +13,8 @@ import { Auth } from './components';
 // Handles requests to the server during production and fetching mocks in development
 class AuthContainer extends React.Component {
   state = {
-    logErr: '',
-    regErr: '',
+    logErr: '', // Login Error
+    regErr: '', // Registration Error
     waiting: false,
   };
 
@@ -105,7 +105,9 @@ class AuthContainer extends React.Component {
 }
 
 AuthContainer.propTypes = {
+  // Handler for when the user wants to finish authenticating
   authFinished: PropTypes.func,
+  // Handler for when the user wants to exit
   authCancelled: PropTypes.func.isRequired,
 };
 

@@ -1,5 +1,6 @@
 import Connection from 'server/core/connection';
 
+const { NODE_ENV } = process.env;
 /**
  * Creates a new user on the server
  *
@@ -9,11 +10,18 @@ import Connection from 'server/core/connection';
  */
 export function createUser(newUser) {
   return new Promise((resolve, reject) => {
-    new Connection()
-      .post()
-      .users()
-      .data(newUser)
-      .call(resolve, reject);
+    if (NODE_ENV === 'development') {
+    import('server/core/utils/users.mock.js')
+      .then((mocks) => {
+        resolve(mocks.default);
+      });
+    } else {
+      new Connection()
+        .post()
+        .users()
+        .data(newUser)
+        .call(resolve, reject);
+    }
   });
 }
 

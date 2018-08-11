@@ -6,7 +6,7 @@ import Tab from '@material-ui/core/Tab';
 
 import logger from 'logger.js';
 import Login from './Login.jsx';
-import Register from './Register.jsx';
+import { RegisterForm } from '.';
 
 class Auth extends React.Component {
   state = {
@@ -49,7 +49,7 @@ class Auth extends React.Component {
         {/* Content for the Tabs */}
         {
           index === 'one'
-            && <Register
+            && <RegisterForm
               handleRegister={handleRegister}
               regErr={regErr}
               waiting={waiting}

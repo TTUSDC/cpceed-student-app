@@ -22,6 +22,7 @@ const RoleField = (props) => {
     <FormControl>
       <InputLabel htmlFor='role-select'>Role</InputLabel>
       <Select
+        id='selector'
         value={currentValue}
         onChange={onNewValue(name)}
         inputProps={{
@@ -41,9 +42,13 @@ RoleField.propTypes = {
   // The name of the Input
   name: PropTypes.string.isRequired,
   // The role that is currently selected
-  currentValue: PropTypes.string.isRequired,
+  currentValue: PropTypes.string,
   // A change handler for when the user is picking their role
   onNewValue: PropTypes.func.isRequired,
+};
+
+RoleField.defaultProps = {
+  currentValue: 'student',
 };
 
 export default RoleField;

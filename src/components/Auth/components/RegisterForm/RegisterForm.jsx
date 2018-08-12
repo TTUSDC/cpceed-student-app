@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import logger from 'logger.js';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -18,7 +19,6 @@ export class RegisterForm extends React.Component {
     confirmPass: '',
     name: '',
     role: 'student',
-    preventSubmit: true,
   };
 
   handleInputChange = name => (event) => {
@@ -35,35 +35,53 @@ export class RegisterForm extends React.Component {
       newState[name] = value;
 
       this.props.validate(name, newState);
-      this.checkForErrors();
 
       return newState;
     });
   }
 
   // Determines whether or not to prevent a submittion
-  checkForErrors = () => (
-    this.setState((prevState) => {
-      const newState = prevState;
-      newState.preventSubmit = (
-        this.props.waiting
-        || Boolean(this.props.regErr)
-        || Boolean(this.props.emailErr)
-        || Boolean(this.props.passErr)
-        || Boolean(this.props.confirmErr)
-      );
-      return newState;
-    })
-  );
+  checkForErrors = () => new Promise((resolve, reject) => {
+    // Checks for the errors
+    const preventSubmit = (
+      Boolean(this.props.regErr)
+      || Boolean(this.props.emailErr)
+      || Boolean(this.props.passErr)
+      || Boolean(this.props.confirmErr)
+      || this.state.password === ''
+      || this.state.confirmPass === ''
+      || this.state.name === ''
+      || this.state.email === ''
+    );
 
-  handleSubmit = () => {
-    this.props.handleRegister({
-      email: this.state.email,
-      password: this.state.password,
-      name: this.state.name,
-      role: this.state.role,
-    });
-  }
+    if (preventSubmit === true) {
+      reject(new Error('There are invalid values in the fields above'));
+    // Checks for a stalled server
+    } else if (this.props.waiting === true) {
+      reject(new Error('Server not ready'));
+    }
+
+    resolve();
+  });
+
+  // Will either accept the submittion or display an error when submitting
+  handleSubmit = () => new Promise((resolve) => {
+    this.checkForErrors()
+      .then(() => {
+        this.props.handleRegister({
+          email: this.state.email,
+          password: this.state.password,
+          name: this.state.name,
+          role: this.state.role,
+        });
+        resolve();
+      })
+      .catch((err) => {
+        // TODO: Display a global error
+        logger.info(this.props);
+        logger.error(err.message);
+      });
+  })
 
   render() {
     const {
@@ -72,7 +90,6 @@ export class RegisterForm extends React.Component {
       confirmPass,
       name,
       role,
-      preventSubmit,
     } = this.state;
 
     const {
@@ -128,7 +145,6 @@ export class RegisterForm extends React.Component {
           variant='raised'
           fullWidth
           color='primary'
-          disabled={preventSubmit}
           onClick={this.handleSubmit}
         >
           Sign Up

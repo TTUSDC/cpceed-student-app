@@ -1,5 +1,5 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -11,7 +11,45 @@ import { RoleField, TextField } from 'components/';
 // Verification
 import { FormChecker as withInputValidation } from 'hoc/';
 
-export class RegisterForm extends React.Component {
+// Styles
+import { FormStyles as styles } from 'components/Auth/styles/';
+
+type State = {
+  email: string,
+  password: string,
+  confirmPass: string,
+  name: string,
+  role: string,
+  preventSubmit: boolean,
+}
+
+type FormValues = {
+  email: string,
+  password: string,
+  name: string,
+  role: string,
+}
+
+type Props = {
+  // Handles a registration action
+  handleRegister: (FormValues) => null,
+  // Don't know what this is
+  regErr: string,
+  // True: waiting for a network call to finish
+  waiting: boolean,
+  // Styles
+  classes: Object,
+  // Email Error from FormChecker
+  emailErr: string,
+  // Password Error from FormChecker
+  passErr: string,
+  // Confirm Password Error from FormChecker
+  confirmErr: string,
+  // Validation function to tell FormCheck what we are validating
+  validate: (string, State) => null,
+};
+
+export class RegisterForm extends React.Component<Props, State> {
   state = {
     email: '',
     password: '',
@@ -21,7 +59,7 @@ export class RegisterForm extends React.Component {
     preventSubmit: true,
   };
 
-  handleInputChange = name => (event) => {
+  handleInputChange = (name: string) => (event: SyntheticInputEvent<HTMLInputElement>) => {
     const { value } = event.target;
     this.setState((prevState) => {
       const newState = prevState;
@@ -137,40 +175,5 @@ export class RegisterForm extends React.Component {
     );
   }
 }
-
-RegisterForm.propTypes = {
-  // Handles a registration action
-  handleRegister: PropTypes.func.isRequired,
-  // Don't know what this is
-  regErr: PropTypes.string.isRequired,
-  // True: waiting for a network call to finish
-  waiting: PropTypes.bool.isRequired,
-  // Styles
-  classes: PropTypes.shape({}),
-  // Email Error from FormChecker
-  emailErr: PropTypes.string.isRequired,
-  // Password Error from FormChecker
-  passErr: PropTypes.string.isRequired,
-  // Confirm Password Error from FormChecker
-  confirmErr: PropTypes.string.isRequired,
-  // Validation function to tell FormCheck what we are validating
-  // Requires a tag name
-  validate: PropTypes.func.isRequired,
-};
-
-RegisterForm.defaultProps = {
-  classes: {},
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    // Translation: Any child of the host
-    '& > *': {
-      margin: '10px',
-    },
-  },
-};
 
 export default withStyles(styles)(withInputValidation(RegisterForm));

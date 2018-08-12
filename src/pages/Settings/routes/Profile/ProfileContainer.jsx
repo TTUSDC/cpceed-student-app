@@ -1,5 +1,5 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import * as server from 'server';
@@ -7,18 +7,29 @@ import { updateUser } from 'redux/actions.js';
 import logger from 'logger.js';
 import { Profile } from './components';
 
-class ProfileContainer extends React.Component {
-  constructor(props) {
+type Props = {
+  dispatch: Function,
+  user: {
+    name: string,
+    uid: string,
+  },
+};
+
+type State = {
+  proErr: string,
+  waiting: boolean,
+}
+
+class ProfileContainer extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       proErr: '',
       waiting: false,
     };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(data) {
+  handleSubmit = (data) => {
     this.setState({
       waiting: true,
       proErr: '',
@@ -55,14 +66,6 @@ class ProfileContainer extends React.Component {
     );
   }
 }
-
-ProfileContainer.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    uid: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 function mapStateToProps(state) {
   return {

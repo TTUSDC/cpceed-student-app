@@ -1,5 +1,5 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -14,10 +14,24 @@ const styles = () => ({
   },
 });
 
+export type Props = {
+  // determines whether or not the modal is open, usually based off the
+  // state of the container component
+  open: boolean,
+  // Toggles the open state
+  toggle: Function,
+  // Material JSS Classes
+  classes: Object,
+  // Content of the Modal
+  children?: Object,
+  // Will change to true when screen is bellow sm breakpoint
+  fullScreen: boolean,
+};
+
 /**
  * A Modal wrapper for Material UI that has a centered content
  */
-export const ModalView = (props) => {
+export const ModalView = (props: Props) => {
   const {
     open,
     classes,
@@ -27,7 +41,6 @@ export const ModalView = (props) => {
   } = props;
 
   return (
-    // Make it fullscreen and allow for the user to quit in mobile
     <Dialog
       fullScreen={fullScreen}
       open={open}
@@ -46,20 +59,6 @@ export const ModalView = (props) => {
       </DialogActions>
     </Dialog>
   );
-};
-
-ModalView.propTypes = {
-  // determines whether or not the modal is open, usually based off the
-  // state of the container component
-  open: PropTypes.bool.isRequired,
-  // Toggles the open state
-  toggle: PropTypes.func.isRequired,
-  // Material JSS Classes
-  classes: PropTypes.shape({}),
-  // Content of the Modal
-  children: PropTypes.shape({}),
-  // Will change to true when screen is bellow sm breakpoint
-  fullScreen: PropTypes.bool.isRequired,
 };
 
 ModalView.defaultProps = {

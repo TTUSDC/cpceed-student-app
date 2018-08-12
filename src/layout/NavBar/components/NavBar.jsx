@@ -1,5 +1,5 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -28,7 +28,18 @@ const styles = {
   },
 };
 
+type Props = {
+  user: {
+    role: string,
+    name?: string,
+  },
+  classes?: {},
+  navigate: Function,
+  logout: Function,
+};
+
 export class NavBar extends React.Component {
+  props: Props;
   state = {
     openMenu: false,
     auth: false,
@@ -118,16 +129,6 @@ export class NavBar extends React.Component {
   }
 }
 
-
-NavBar.propTypes = {
-  user: PropTypes.shape({
-    role: PropTypes.string.isRequired,
-    name: PropTypes.string,
-  }).isRequired,
-  classes: PropTypes.shape({}),
-  navigate: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
-};
 
 NavBar.defaultProps = {
   user: {

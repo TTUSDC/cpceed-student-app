@@ -1,5 +1,5 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -7,7 +7,12 @@ import * as server from 'server';
 import logger from 'logger.js';
 import { NavBar } from './components';
 
-class NavBarContainer extends React.Component {
+type Props = {
+  user: Object,
+  history: { push: (string) => null },
+};
+
+class NavBarContainer extends React.Component<Props> {
   /*
     TODO: Let redux router handle this so that routing also becomes a function of state
     Navigates by pushing the relative URL to the router.
@@ -53,13 +58,6 @@ class NavBarContainer extends React.Component {
     );
   }
 }
-
-NavBarContainer.propTypes = {
-  user: PropTypes.shape({}).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 // Used by connect to map user to this.props.user
 function mapStateToProps(state) {

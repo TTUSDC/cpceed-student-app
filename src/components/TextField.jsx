@@ -1,13 +1,27 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 
+type Props = {
+  title: string,
+  // Name of the value to change
+  tag: string,
+  // Whether or not to hide the text inside the inputs
+  hide: boolean,
+  // The role that is currently selected
+  currentValue: string,
+  // A change handler for when the user changes value
+  onNewValue: (string) => null,
+  // Whether or not there is an error
+  error?: string,
+}
+
 // Handles password input changes and errors
-const TextField = (props) => {
+const TextField = (props: Props) => {
   const {
     title,
     hide,
@@ -37,21 +51,6 @@ const TextField = (props) => {
       </FormHelperText>
     </FormControl>
   );
-};
-
-TextField.propTypes = {
-  // Title for the input
-  title: PropTypes.string.isRequired,
-  // Name of the value to change
-  tag: PropTypes.string.isRequired,
-  // Whether or not to hide the text inside the inputs
-  hide: PropTypes.bool,
-  // The role that is currently selected
-  currentValue: PropTypes.string.isRequired,
-  // A change handler for when the user changes value
-  onNewValue: PropTypes.func.isRequired,
-  // Whether or not there is an error
-  error: PropTypes.string,
 };
 
 TextField.defaultProps = {

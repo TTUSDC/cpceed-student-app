@@ -85,7 +85,7 @@ const FormChecker = Component => class extends React.Component {
   };
 
   // Use the tag to determine what test to run
-  validate = tag => (currentValues) => {
+  validate = (tag, currentValues) => {
     switch(tag) {
       case 'confirmPass':
         this.checkConfirm(

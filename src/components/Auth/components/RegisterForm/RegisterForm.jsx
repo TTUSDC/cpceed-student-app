@@ -8,18 +8,17 @@ import Typography from '@material-ui/core/Typography';
 // Fields
 import { RoleField, TextField } from 'components/';
 
-class RegisterForm extends React.Component {
+// Verification
+import { FormChecker as withInputValidation } from 'hoc/';
+
+export class RegisterForm extends React.Component {
   state = {
     email: '',
     password: '',
     confirmPass: '',
     name: '',
     role: 'student',
-    err: {
-      emailErr: '',
-      passErr: '',
-      confirmErr: '',
-    },
+    preventSubmit: true,
   };
 
   handleInputChange = name => (event) => {
@@ -30,15 +29,32 @@ class RegisterForm extends React.Component {
       // Resets the confirmPass field
       if(name === 'password') {
         newState.confirmPass = '';
-        newState.err.confirmErr = '';
       }
 
       // Replace selected state with new value
       newState[name] = value;
 
+      this.props.validate(name, newState);
+      this.checkForErrors();
+
       return newState;
     });
   }
+
+  // Determines whether or not to prevent a submittion
+  checkForErrors = () => (
+    this.setState((prevState) => {
+      const newState = prevState;
+      newState.preventSubmit = (
+        this.props.waiting
+        || Boolean(this.props.regErr)
+        || Boolean(this.props.emailErr)
+        || Boolean(this.props.passErr)
+        || Boolean(this.props.confirmErr)
+      );
+      return newState;
+    })
+  );
 
   handleSubmit = () => {
     this.props.handleRegister({
@@ -56,29 +72,19 @@ class RegisterForm extends React.Component {
       confirmPass,
       name,
       role,
-      err: {
-        emailErr,
-        passErr,
-        confirmErr,
-      },
+      preventSubmit,
     } = this.state;
 
     const {
-      regErr,
-      waiting,
+      emailErr,
+      passErr,
+      confirmErr,
+      classes,
     } = this.props;
 
-    // Determines whether or not to prevent a submittion
-    const blockedSubmit = (
-      waiting
-      || Boolean(regErr)
-      || Boolean(emailErr)
-      || Boolean(passErr)
-      || Boolean(confirmErr)
-    );
 
     return (
-      <form noValidate autoComplete='off'>
+      <form className={classes.container} noValidate autoComplete='off'>
         <RoleField
           name='role'
           currentValue={role}
@@ -89,6 +95,7 @@ class RegisterForm extends React.Component {
           tag='email'
           currentValue={email}
           onNewValue={this.handleInputChange}
+          error={emailErr}
         />
         <Typography align='center' variant='caption'>
         Your password should use at least 8 characters. It should
@@ -121,7 +128,7 @@ class RegisterForm extends React.Component {
           variant='raised'
           fullWidth
           color='primary'
-          disabled={blockedSubmit}
+          disabled={preventSubmit}
           onClick={this.handleSubmit}
         >
           Sign Up
@@ -139,13 +146,31 @@ RegisterForm.propTypes = {
   // True: waiting for a network call to finish
   waiting: PropTypes.bool.isRequired,
   // Styles
-  // classes: PropTypes.shape({}),
+  classes: PropTypes.shape({}),
+  // Email Error from FormChecker
+  emailErr: PropTypes.string.isRequired,
+  // Password Error from FormChecker
+  passErr: PropTypes.string.isRequired,
+  // Confirm Password Error from FormChecker
+  confirmErr: PropTypes.string.isRequired,
+  // Validation function to tell FormCheck what we are validating
+  // Requires a tag name
+  validate: PropTypes.func.isRequired,
 };
 
 RegisterForm.defaultProps = {
-  // classes: {},
+  classes: {},
 };
 
-const styles = {};
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    // Translation: Any child of the host
+    '& > *': {
+      margin: '10px',
+    },
+  },
+};
 
-export default withStyles(styles)(RegisterForm);
+export default withStyles(styles)(withInputValidation(RegisterForm));

@@ -1,231 +1,91 @@
+/* eslint no-console: 0  */
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import sinon from 'sinon';
+import { spy } from 'sinon';
 
-import Register from './RegisterForm.jsx';
+// Unwrapped Component
+import { RegisterForm } from './RegisterForm.jsx';
 
-describe('Register.jsx', () => {
+describe('RegisterForm.jsx', () => {
   let props;
+  let wrapper;
+  let handleRegisterSpy;
+  let validateSpy;
 
   beforeEach(() => {
+    handleRegisterSpy = spy();
+    validateSpy = spy();
+
     props = {
-      handleRegister: () => {},
+      handleRegister: handleRegisterSpy,
       regErr: '',
       waiting: false,
-    };
-  });
-
-  it('Handles password changes', () => {
-    const wrapper = shallow(<Register {...props} />);
-    const password = 'test';
-    const event = {
-      target: {
-        value: password,
-      },
+      classes: {},
+      emailErr: '',
+      passErr: '',
+      confirmErr: '',
+      validate: validateSpy,
     };
 
-    wrapper.setState({
-      confirmPass: 'temp',
-      err: {
-        confirmErr: 'temp',
-      },
-    });
-
-    wrapper.instance().handlePasswordChange(event);
-    expect(wrapper.state().password).to.equal(password);
-    expect(wrapper.state().confirmPass).to.equal('');
-    expect(wrapper.state().err.confirmErr).to.equal('');
+    wrapper = shallow(<RegisterForm {...props} />);
   });
 
-  it('Handles input changes', () => {
-    const wrapper = shallow(<Register {...props} />);
-    const event = {
-      target: {
-        value: 'test@ttu.edu',
-        name: 'email',
-      },
+  it('should not allow the user to submit the form at render', () => {
+    expect(wrapper.state().preventSubmit).to.equal(true);
+  });
+
+  it('should not allow the form to be submitted if there are errors or if we are waiting', () => {
+    const propsWithErrors = {
+      ...props,
+      emailErr: 'Bad Email!',
+      passErr: 'Bad Password!',
+    };
+    wrapper.setProps(propsWithErrors);
+    expect(wrapper.state().preventSubmit).to.equal(true);
+    const propsWithoutErrors = {
+      ...props,
     };
 
-    wrapper.instance().handleInputChange(event);
-    expect(wrapper.state().email).to.equal('test@ttu.edu');
+    // Mock a change in input since the input components are tested seperately
+    wrapper.setProps(propsWithoutErrors);
+    wrapper.instance().checkForErrors();
+    expect(wrapper.state().preventSubmit).to.equal(false);
   });
 
-  it('Handles selection changes', () => {
-    const wrapper = shallow(<Register {...props} />);
-    const option = 'admin';
-    const event = {
-      target: {
-        name: 'role',
-      },
-      option,
+  it('should call validate() and checkForErrors() when input is recieved', () => {
+    const testState = {
+      email: 'newEmail',
+      password: 'newPasswordThatSucks',
+      confirmPass: 'thisWillThrowAnError',
+      name: 'Nils',
+      role: 'BDFL',
+      preventSubmit: false,
     };
-
-    wrapper.setState({
-      err: {
-        stuIDErr: 'temp',
-      },
-    });
-
-    wrapper.instance().handleSelectChange(event);
-    expect(wrapper.state().role).to.equal(option);
-  });
-
-  it('Calls handleRegister when submit is pressed', () => {
-    props.handleRegister = sinon.spy();
-    const wrapper = shallow(<Register {...props} />);
-    const event = {
-      preventDefault: () => {},
+    const changePasswordEvent = {
+      target: { value: 'AnotherPassword' },
     };
-
-    wrapper.find({ label: 'Register' }).simulate('click', event);
-    expect(props.handleRegister.calledOnce).to.equal(true);
+    wrapper.setState(testState);
+    wrapper.instance().handleInputChange('password')(changePasswordEvent);
+    expect(props.validate.called).to.equal(true);
   });
 
-  it('Checks password onBlur, removes errors onFocus', () => {
-    const wrapper = shallow(<Register {...props} />);
-    const passInput = wrapper.find({ name: 'password' });
-    const event = {
-      target: {
-        name: 'password',
-      },
+  it('should submit the form without any changes to the values', () => {
+    const formValues = {
+      email: 'student.atTech@ttu.edu',
+      password: 'ProperPassword1!',
+      confirmPass: 'ProperPassword1',
+      name: 'Miggy',
+      role: 'student',
+      preventSubmit: false,
     };
-
-    wrapper.setState({
-      password: 'å',
-    });
-
-    passInput.simulate('blur', event);
-    expect(wrapper.state().err.passErr).to
-      .equal('Please use only ASCII characters.');
-
-    wrapper.setState({
-      password: 'asdf',
-    });
-
-    passInput.simulate('blur', event);
-    expect(wrapper.state().err.passErr).to
-      .equal('Please use at least 8 characters.');
-
-    wrapper.setState({
-      password: 'asdfasdf',
-    });
-
-    passInput.simulate('blur', event);
-    expect(wrapper.state().err.passErr).to
-      .equal('Please use at least one uppercase letter.');
-
-    wrapper.setState({
-      password: 'ASDFASDF',
-    });
-
-    passInput.simulate('blur', event);
-    expect(wrapper.state().err.passErr).to
-      .equal('Please use at least one lowercase letter.');
-
-    wrapper.setState({
-      password: 'asdfaSdf',
-    });
-
-    passInput.simulate('blur', event);
-    expect(wrapper.state().err.passErr).to
-      .equal('Please use at least one number.');
-
-    wrapper.setState({
-      password: 'asdfaS3f',
-    });
-
-    passInput.simulate('blur', event);
-    expect(wrapper.state().err.passErr).to
-      .equal('Please use at least one special character.');
-
-    passInput.simulate('focus', event);
-    expect(wrapper.state().err.passErr).to.equal('');
-
-    wrapper.setState({
-      password: 'asdfaS3_',
-    });
-
-    passInput.simulate('blur', event);
-    expect(wrapper.state().err.passErr).to
-      .equal('');
-  });
-
-  it('Checks email onBlur, removes errors onFocus', () => {
-    const wrapper = shallow(<Register {...props} />);
-    const input = wrapper.find({ name: 'email' });
-    const event = {
-      target: {
-        name: 'email',
-      },
-    };
-
-    wrapper.setState({
-      email: 'test@test.com',
-    });
-
-    input.simulate('blur', event);
-    expect(wrapper.state().err.emailErr).to
-      .equal('Please use a TTU email address.');
-
-    input.simulate('focus', event);
-    expect(wrapper.state().err.emailErr).to.equal('');
-
-    wrapper.setState({
-      email: 'test@ttu.edu',
-    });
-
-    input.simulate('blur', event);
-    expect(wrapper.state().err.emailErr).to
-      .equal('');
-  });
-
-  it('Checks password confirmation onBlur, removes errors onFocus', () => {
-    const wrapper = shallow(<Register {...props} />);
-    const input = wrapper.find({ name: 'confirmPass' });
-    const event = {
-      target: {
-        name: 'confirmPass',
-      },
-    };
-
-    wrapper.setState({
-      password: 'test',
-      confirmPass: 'asdf',
-    });
-
-    input.simulate('blur', event);
-    expect(wrapper.state().err.confirmErr).to
-      .equal('Please enter a matching password.');
-
-    input.simulate('focus', event);
-    expect(wrapper.state().err.confirmErr).to.equal('');
-
-    wrapper.setState({
-      password: 'test',
-      confirmPass: 'test',
-    });
-
-    input.simulate('blur', event);
-    expect(wrapper.state().err.confirmErr).to
-      .equal('');
-  });
-
-  it('Displays server errors', () => {
-    props.regErr = 'Message';
-    const wrapper = shallow(<Register {...props} />);
-
-    expect(wrapper.contains(
-      <span style={{ color: 'red' }}>{props.regErr}</span>,
-    )).to.equal(true);
-  });
-
-  it('Disables submit while waiting for server', () => {
-    props.handleRegister = sinon.spy();
-    props.waiting = true;
-    const wrapper = shallow(<Register {...props} />);
-
-    wrapper.find({ label: 'Register' }).simulate('click');
-    expect(props.handleRegister.calledOnce).to.equal(false);
+    wrapper.setState(formValues);
+    wrapper.instance().handleSubmit();
+    expect(handleRegisterSpy.calledWithExactly({
+      email: 'student.atTech@ttu.edu',
+      password: 'ProperPassword1!',
+      name: 'Miggy',
+      role: 'student',
+    })).to.equal(true);
   });
 });

@@ -98,7 +98,6 @@ export class RegisterForm extends React.Component {
       classes,
     } = this.props;
 
-
     return (
       <form className={classes.container} noValidate autoComplete='off'>
         <RoleField
@@ -156,7 +155,7 @@ export class RegisterForm extends React.Component {
 RegisterForm.propTypes = {
   // Handles a registration action
   handleRegister: PropTypes.func.isRequired,
-  // Don't know what this is
+  // Registration/Network Error
   regErr: PropTypes.string.isRequired,
   // True: waiting for a network call to finish
   waiting: PropTypes.bool.isRequired,

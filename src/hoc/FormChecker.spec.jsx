@@ -31,7 +31,7 @@ test('should pass an error when ID is invalid', () => {
 });
 
 test('should pass an error when password is invalid', () => {
-  wrapper.instance().validate('password')({ password: 'notagoodpassword' });
+  wrapper.instance().validate('password', { password: 'notagoodpassword' });
   wrapper.update();
   expect(wrapper.children().props().passErr).not.to.equal('');
 });

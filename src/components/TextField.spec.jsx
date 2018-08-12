@@ -24,7 +24,7 @@ describe('TextField.jsx', () => {
     expect(onNewValueSpy.calledOnce).to.equal(true);
   });
 
-  it('should display the FormHelperText component when there is no error', () => {
+  it('should display the FormHelperText component when there is an error', () => {
     const props = {
       ...initProps,
       error: 'there is one',

@@ -65,7 +65,7 @@ export class RegisterForm extends React.Component {
   });
 
   // Will either accept the submittion or display an error when submitting
-  handleSubmit = () => new Promise((resolve) => {
+  handleSubmit = () => {
     this.checkForErrors()
       .then(() => {
         this.props.handleRegister({
@@ -74,14 +74,13 @@ export class RegisterForm extends React.Component {
           name: this.state.name,
           role: this.state.role,
         });
-        resolve();
       })
       .catch((err) => {
         // TODO: Display a global error
         logger.info(this.props);
         logger.error(err.message);
       });
-  })
+  }
 
   render() {
     const {

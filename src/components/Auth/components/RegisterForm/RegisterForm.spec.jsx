@@ -71,7 +71,7 @@ describe('RegisterForm.jsx', () => {
       });
   });
 
-  it('should call validate() and checkForErrors() when input is recieved', () => {
+  it('should call validate() when input is recieved', () => {
     const testState = {
       email: 'newEmail',
       password: 'newPasswordThatSucks',
@@ -86,6 +86,12 @@ describe('RegisterForm.jsx', () => {
     wrapper.setState(testState);
     wrapper.instance().handleInputChange('password')(changePasswordEvent);
     expect(props.validate.called).to.equal(true);
+  });
+
+  it('should call checkForErrors() when the submit button is clicked', () => {
+    const checkForErrorsSpy = spy(wrapper.instance(), 'checkForErrors');
+    wrapper.find('WithStyles(Button)').simulate('click');
+    expect(checkForErrorsSpy.called).to.equal(true);
   });
 
   it('should submit the form without any changes to the values', (done) => {

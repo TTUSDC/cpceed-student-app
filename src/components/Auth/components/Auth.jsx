@@ -19,6 +19,7 @@ type State = {
   index: string
 }
 
+// The complete Auth Form including Login and Register
 class Auth extends React.Component<Props, State> {
   static defaultProps = {
     regErr: '',

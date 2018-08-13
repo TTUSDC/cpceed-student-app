@@ -3,12 +3,10 @@ import React from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
 
-import styles from './Login.styles.js';
+import { FormStyles as styles } from 'components/Auth/styles/';
+
+import { TextField } from 'components/';
 
 type Props = {
   classes: Object,
@@ -22,7 +20,7 @@ type State = {
   password: string,
 }
 
-class Login extends React.Component<Props, State> {
+export class Login extends React.Component<Props, State> {
   state = {
     email: '',
     password: '',
@@ -35,44 +33,29 @@ class Login extends React.Component<Props, State> {
   }
 
   handleSubmit = () => {
-    if (!this.props.waiting) {
-      this.props.handleLogin(this.state.email, this.state.password);
-    }
+    this.props.handleLogin(this.state.email, this.state.password);
   }
 
   render() {
     const { logErr, classes, waiting } = this.props;
     const { email, password } = this.state;
+
     return (
       <form className={classes.container} noValidate autoComplete='off'>
-        <FormControl className={classes.text}>
-          <InputLabel htmlFor='email-input'>Email</InputLabel>
-          <Input
-            id='email-input'
-            type='email'
-            value={email}
-            onChange={this.handleInputChange('email')}
-          />
-        </FormControl>
-        <FormControl
-          className={classes.text}
-          error={Boolean(logErr)}
-        >
-          <InputLabel htmlFor='password-input'>Password</InputLabel>
-          <Input
-            id='password-input'
-            type='password'
-            value={password}
-            onChange={this.handleInputChange('password')}
-          />
-          {/* Display Error only when there is an error in the password */}
-          {/* TODO: Turn this into a snackbar */}
-          {
-            this.props.logErr
-              ? <FormHelperText error>{logErr}</FormHelperText>
-              : null
-            }
-        </FormControl>
+        <TextField
+          title='Email'
+          tag='email'
+          currentValue={email}
+          onNewValue={this.handleInputChange}
+        />
+        <TextField
+          hide
+          title='Password'
+          tag='password'
+          currentValue={password}
+          onNewValue={this.handleInputChange}
+          error={logErr}
+        />
         <Button
           id='login-button'
           className={classes.button}

@@ -1,14 +1,13 @@
+/* eslint no-console: 0  */
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import sinon from 'sinon';
 
-import FormHelperText from '@material-ui/core/FormHelperText';
-
-import Login from './Login.jsx';
+import { Login } from './Login.jsx';
 
 describe('Login.jsx', () => {
   let props;
+  let wrapper;
 
   beforeEach(() => {
     props = {
@@ -17,10 +16,11 @@ describe('Login.jsx', () => {
       waiting: false,
       classes: {},
     };
+
+    wrapper = shallow(<Login {...props} />);
   });
 
   it('Handles input changes', () => {
-    const wrapper = shallow(<Login {...props} />).dive();
     const event = {
       target: {
         value: 'test@ttu.edu',
@@ -31,31 +31,23 @@ describe('Login.jsx', () => {
     expect(wrapper.state().email).to.equal('test@ttu.edu');
   });
 
-  it('Displays server errors', () => {
-    props.logErr = 'Message';
-    const wrapper = shallow(<Login {...props} />).dive();
+  it('button should be disabled when waiting prop is true', () => {
+    wrapper.setProps({
+      ...props,
+      waiting: true,
+    });
 
-    expect(wrapper.contains(
-      <FormHelperText error>
-        {props.logErr}
-      </FormHelperText>,
-    )).to.equal(true);
+    const button = wrapper.find('#login-button');
+    expect(button.props().disabled).to.equal(true);
   });
 
-  it('Disables submit while waiting for server', () => {
-    props.handleLogin = sinon.spy();
-    props.waiting = true;
-    const wrapper = shallow(<Login {...props} />).dive();
+  it('button should be not disabled when waiting prop is false', () => {
+    wrapper.setProps({
+      ...props,
+      waiting: false,
+    });
 
-    wrapper.find('#login-button').simulate('click');
-    expect(props.handleLogin.calledOnce).to.equal(false);
-  });
-
-  it('Calls handleLogin when submit is pressed', () => {
-    props.handleLogin = sinon.spy();
-    const wrapper = shallow(<Login {...props} />).dive();
-
-    wrapper.find('#login-button').simulate('click');
-    expect(props.handleLogin.calledOnce).to.equal(true);
+    const button = wrapper.find('#login-button');
+    expect(button.props().disabled).to.equal(false);
   });
 });

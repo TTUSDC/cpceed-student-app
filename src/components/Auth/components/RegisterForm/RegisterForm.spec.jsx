@@ -31,9 +31,10 @@ describe('RegisterForm.jsx', () => {
     wrapper = shallow(<RegisterForm {...props} />);
   });
 
-  it('should not allow the user to submit the form at render', () => {
-    expect(wrapper.state().preventSubmit).to.equal(true);
-  });
+  it('should not allow the user to submit the form at render', () => wrapper.instance().checkForErrors()
+    .catch((err) => {
+      expect(err).to.exist;
+    }));
 
   it('should not allow the form to be submitted if there are errors or if we are waiting', () => {
     const propsWithErrors = {
@@ -42,18 +43,35 @@ describe('RegisterForm.jsx', () => {
       passErr: 'Bad Password!',
     };
     wrapper.setProps(propsWithErrors);
-    expect(wrapper.state().preventSubmit).to.equal(true);
+    return wrapper.instance().checkForErrors()
+      .catch((err) => {
+        expect(err).to.exist;
+      });
+  });
+
+  it('should allow the form to be submitted if errors are cleared', () => {
     const propsWithoutErrors = {
       ...props,
     };
 
+    const filledForm = {
+      email: 'registration.form@ttu.edu',
+      password: 'Password89067!',
+      confirmPass: 'Password89067!',
+      name: 'Student',
+      role: 'student',
+    };
+
     // Mock a change in input since the input components are tested seperately
     wrapper.setProps(propsWithoutErrors);
-    wrapper.instance().checkForErrors();
-    expect(wrapper.state().preventSubmit).to.equal(false);
+    wrapper.setState(filledForm);
+    return wrapper.instance().checkForErrors()
+      .then(() => {
+        expect(true).to.equal(true);
+      });
   });
 
-  it('should call validate() and checkForErrors() when input is recieved', () => {
+  it('should call validate() when input is recieved', () => {
     const testState = {
       email: 'newEmail',
       password: 'newPasswordThatSucks',
@@ -70,22 +88,31 @@ describe('RegisterForm.jsx', () => {
     expect(props.validate.called).to.equal(true);
   });
 
-  it('should submit the form without any changes to the values', () => {
+  it('should call checkForErrors() when the submit button is clicked', () => {
+    const checkForErrorsSpy = spy(wrapper.instance(), 'checkForErrors');
+    wrapper.find('WithStyles(Button)').simulate('click');
+    expect(checkForErrorsSpy.called).to.equal(true);
+  });
+
+  it('should submit the form without any changes to the values', (done) => {
     const formValues = {
       email: 'student.atTech@ttu.edu',
       password: 'ProperPassword1!',
-      confirmPass: 'ProperPassword1',
+      confirmPass: 'ProperPassword1!',
       name: 'Miggy',
       role: 'student',
       preventSubmit: false,
     };
     wrapper.setState(formValues);
     wrapper.instance().handleSubmit();
-    expect(handleRegisterSpy.calledWithExactly({
-      email: 'student.atTech@ttu.edu',
-      password: 'ProperPassword1!',
-      name: 'Miggy',
-      role: 'student',
-    })).to.equal(true);
+    setTimeout(() => {
+      expect(handleRegisterSpy.calledWithExactly({
+        email: 'student.atTech@ttu.edu',
+        password: 'ProperPassword1!',
+        name: 'Miggy',
+        role: 'student',
+      })).to.equal(true);
+      done();
+    }, 100);
   });
 });

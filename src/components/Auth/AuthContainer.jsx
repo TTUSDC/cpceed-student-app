@@ -65,7 +65,7 @@ class AuthContainer extends React.Component<Props, State> {
     userData.email = data.email;
     userData.name = data.name;
 
-    if (process.env.NODE_ENV) {
+    if (process.env.NODE_ENV === 'development') {
       logger.info('Hi-jacking user data in development. Here is what was passed');
       logger.info(userData);
     }

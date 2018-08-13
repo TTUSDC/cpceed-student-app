@@ -33,7 +33,7 @@ type FormValues = {
 type Props = {
   // Handles a registration action
   handleRegister: (FormValues) => null,
-  // Don't know what this is
+  // Registration/Network Error
   regErr: string,
   // True: waiting for a network call to finish
   waiting: boolean,

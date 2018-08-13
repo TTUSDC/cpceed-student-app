@@ -30,7 +30,7 @@ class Auth extends React.Component<Props, State> {
     index: 'one',
   };
 
-  handleTabChange = (event: any, newIndex: string) => {
+  handleTabChange = ( _: any, newIndex: string) => {
     this.setState({
       index: newIndex,
     });

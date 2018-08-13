@@ -18,8 +18,8 @@ import {
 import logger from 'logger.js';
 
 type Props = {
-  handlePassword: Function,
-  handleEmail: Function,
+  handlePassword: any,
+  handleEmail: any,
   user: { email: string },
   err: {
     password: string,

@@ -33,13 +33,24 @@ type Props = {
     role: string,
     name?: string,
   },
-  classes?: {},
+  classes: Object,
   navigate: Function,
   logout: Function,
 };
 
-export class NavBar extends React.Component {
-  props: Props;
+type State = {
+  openMenu: boolean,
+  auth: boolean,
+  anchorEl: any, // Element
+}
+
+export class NavBar extends React.Component<Props, State> {
+  static defaultProps = {
+    user: {
+      name: '',
+    },
+  };
+
   state = {
     openMenu: false,
     auth: false,
@@ -54,7 +65,7 @@ export class NavBar extends React.Component {
     }));
   }
 
-  toggleOpenMenu = (event) => {
+  toggleOpenMenu = (event: SyntheticEvent<HTMLButtonElement>) => {
     this.setState({
       ...this.state,
       anchorEl: event.currentTarget,
@@ -128,15 +139,5 @@ export class NavBar extends React.Component {
     );
   }
 }
-
-
-NavBar.defaultProps = {
-  user: {
-    name: '',
-  },
-  classes: {
-    root: null,
-  },
-};
 
 export default withStyles(styles)(NavBar);

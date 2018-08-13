@@ -51,14 +51,17 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "jest --silent --env=jsdom",
+    "test": "jest --env=jsdom",
     "eject": "react-scripts eject",
     "config": "cp .env.config .env",
     "lint": "eslint src",
     "docs": "esdoc"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./src/setupTest.js",
+    "setupFiles": [
+      "raf/polyfill",
+      "./src/setupTest.js"
+    ],
     "testEnvironment": "node",
     "moduleDirectories": [
       "<rootDir>node_modules",

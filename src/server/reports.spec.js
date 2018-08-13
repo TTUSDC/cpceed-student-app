@@ -15,7 +15,7 @@ const sinonChai = require('sinon-chai');
 const chai = require('chai');
 
 chai.use(sinonChai);
-const expect = chai.expect;
+const { expect } = chai;
 const sandbox = sinon.createSandbox();
 
 export default describe('Server API: Reports', () => {

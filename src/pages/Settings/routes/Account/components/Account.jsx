@@ -14,7 +14,7 @@ import {
   checkPass,
   checkConfirm,
   checkEmail,
-} from 'components/Auth/components/verify.js';
+} from 'components/Auth/components/RegisterForm/verify.js';
 import logger from 'logger.js';
 
 class Account extends React.Component {

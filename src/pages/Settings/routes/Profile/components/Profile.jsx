@@ -11,7 +11,7 @@ import Footer from 'grommet/components/Footer';
 import Button from 'grommet/components/Button';
 
 type Props = {
-  handleSubmit: Function,
+  handleSubmit: any,
   proErr: string,
   waiting: boolean,
   name: string,

@@ -7,19 +7,19 @@ import DialogActions from '@material-ui/core/DialogActions';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = () => ({
+const styles ={
   root: {
     display: 'flex',
     textAlign: 'center',
   },
-});
+};
 
 export type Props = {
   // determines whether or not the modal is open, usually based off the
   // state of the container component
   open: boolean,
   // Toggles the open state
-  toggle: Function,
+  toggle: () => null,
   // Material JSS Classes
   classes: Object,
   // Content of the Modal

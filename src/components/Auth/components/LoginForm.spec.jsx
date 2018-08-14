@@ -3,9 +3,9 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
-import { Login } from './Login.jsx';
+import { LoginForm } from './LoginForm.jsx';
 
-describe('Login.jsx', () => {
+describe('LoginForm.jsx', () => {
   let props;
   let wrapper;
 
@@ -17,7 +17,7 @@ describe('Login.jsx', () => {
       classes: {},
     };
 
-    wrapper = shallow(<Login {...props} />);
+    wrapper = shallow(<LoginForm {...props} />);
   });
 
   it('Handles input changes', () => {

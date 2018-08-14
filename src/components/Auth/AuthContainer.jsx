@@ -8,7 +8,7 @@ import {
   AuthStates,
 } from 'redux/actions.js';
 import logger from 'logger.js';
-import { Auth } from './components';
+import Auth from './components/Auth.jsx';
 
 type Props = {
   // Handler for when the user wants to finish authenticating

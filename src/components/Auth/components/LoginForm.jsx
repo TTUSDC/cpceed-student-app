@@ -20,7 +20,7 @@ type State = {
   password: string,
 }
 
-export class Login extends React.Component<Props, State> {
+export class LoginForm extends React.Component<Props, State> {
   state = {
     email: '',
     password: '',
@@ -72,4 +72,4 @@ export class Login extends React.Component<Props, State> {
   }
 }
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(LoginForm);

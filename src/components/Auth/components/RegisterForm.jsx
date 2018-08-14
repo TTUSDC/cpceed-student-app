@@ -79,7 +79,7 @@ export class RegisterForm extends React.Component<Props, State> {
 
   // Determines whether or not to prevent a submittion
   checkForErrors = () => new Promise((resolve, reject) => {
-    // Checks for the errors
+    // Checks for the errors and empty inputs
     const preventSubmit = (
       Boolean(this.props.regErr)
       || Boolean(this.props.emailErr)

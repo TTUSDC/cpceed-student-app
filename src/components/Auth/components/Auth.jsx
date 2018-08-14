@@ -4,8 +4,7 @@ import React from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import Login from './Login.jsx';
-import { RegisterForm } from '.';
+import { RegisterForm, LoginForm } from '.';
 
 type Props = {
   handleRegister: (Object) => null,
@@ -75,7 +74,7 @@ class Auth extends React.Component<Props, State> {
         }
         {
           index === 'two'
-            && <Login
+            && <LoginForm
               handleLogin={handleLogin}
               logErr={logErr}
               waiting={waiting}

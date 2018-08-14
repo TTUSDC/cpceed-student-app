@@ -1,11 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import { AuthStates } from 'redux/actions.js';
+
+type Props = {
+  // The name of the Input
+  name: string,
+  // The role that is currently selected
+  currentValue?: string,
+  // A change handler for when the user is picking their role
+  onNewValue: (string) => null,
+};
 
 // Turn AuthStates from actions.js into array for Select
 const authArray = [];
@@ -16,7 +24,7 @@ Object.keys(AuthStates).forEach((key) => {
 });
 
 // Determines what the user's role is
-const RoleField = (props) => {
+const RoleField = (props: Props) => {
   const { currentValue, name, onNewValue } = props;
   return (
     <FormControl>
@@ -36,15 +44,6 @@ const RoleField = (props) => {
       </Select>
     </FormControl>
   );
-};
-
-RoleField.propTypes = {
-  // The name of the Input
-  name: PropTypes.string.isRequired,
-  // The role that is currently selected
-  currentValue: PropTypes.string,
-  // A change handler for when the user is picking their role
-  onNewValue: PropTypes.func.isRequired,
 };
 
 RoleField.defaultProps = {

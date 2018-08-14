@@ -1,19 +1,36 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import logger from 'logger.js';
 import Login from './Login.jsx';
 import { RegisterForm } from '.';
 
-class Auth extends React.Component {
+type Props = {
+  handleRegister: (Object) => null,
+  handleLogin: (email: string, password: string) => null,
+  regErr?: string,
+  logErr?: string,
+  waiting?: boolean,
+};
+
+type State = {
+  index: string
+}
+
+class Auth extends React.Component<Props, State> {
+  static defaultProps = {
+    regErr: '',
+    logErr: '',
+    waiting: false,
+  };
+
   state = {
     index: 'one',
   };
 
-  handleTabChange = (event, newIndex) => {
+  handleTabChange = ( _: any, newIndex: string) => {
     this.setState({
       index: newIndex,
     });
@@ -67,21 +84,5 @@ class Auth extends React.Component {
     );
   }
 }
-
-Auth.propTypes = {
-  handleRegister: PropTypes.func,
-  handleLogin: PropTypes.func,
-  regErr: PropTypes.string,
-  logErr: PropTypes.string,
-  waiting: PropTypes.bool,
-};
-
-Auth.defaultProps = {
-  handleRegister: () => logger.error('handleRegister called without being passed'),
-  handleLogin: () => logger.error('handleLogin called without being passed'),
-  regErr: '',
-  logErr: '',
-  waiting: false,
-};
 
 export default Auth;

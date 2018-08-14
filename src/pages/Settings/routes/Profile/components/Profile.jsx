@@ -1,5 +1,7 @@
+// @flow
+
+// Replace form inputs with TextField
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Box from 'grommet/components/Box';
 import Heading from 'grommet/components/Heading';
@@ -8,14 +10,25 @@ import FormField from 'grommet/components/FormField';
 import Footer from 'grommet/components/Footer';
 import Button from 'grommet/components/Button';
 
-class Profile extends React.Component {
-  constructor(props) {
+type Props = {
+  handleSubmit: any,
+  proErr: string,
+  waiting: boolean,
+  name: string,
+};
+
+type State = {
+  name: string
+};
+
+class Profile extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     const { name } = this.props;
     this.state = { name };
   }
 
-  handleInputChange = (event) => {
+  handleInputChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
     const { target } = event;
     const { value, name } = target;
 
@@ -24,7 +37,7 @@ class Profile extends React.Component {
     });
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = (event: any) => {
     // This prevents a '?' from being appended to the URL
     event.preventDefault();
     const { name, handleSubmit } = this.props;
@@ -93,12 +106,5 @@ class Profile extends React.Component {
     );
   }
 }
-
-Profile.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  proErr: PropTypes.string.isRequired,
-  waiting: PropTypes.bool.isRequired,
-  name: PropTypes.string.isRequired,
-};
 
 export default Profile;

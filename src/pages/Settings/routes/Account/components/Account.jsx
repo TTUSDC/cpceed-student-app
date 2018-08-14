@@ -1,5 +1,5 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import update from 'immutability-helper';
 
 import Box from 'grommet/components/Box';
@@ -17,7 +17,33 @@ import {
 } from 'components/Auth/components/RegisterForm/verify.js';
 import logger from 'logger.js';
 
-class Account extends React.Component {
+type Props = {
+  handlePassword: any,
+  handleEmail: any,
+  user: { email: string },
+  err: {
+    password: string,
+    email: string,
+  },
+  waiting: {
+    password: boolean,
+    email: boolean,
+  },
+};
+
+type State = {
+  password: string,
+  confirm: string,
+  old: string,
+  email: string,
+  err: {
+    password: string,
+    confirm: string,
+    email: string,
+  },
+}
+
+class Account extends React.Component<Props, State> {
   state = {
     password: '',
     confirm: '',
@@ -30,7 +56,7 @@ class Account extends React.Component {
     },
   };
 
-  handlePasswordChange = (event) => {
+  handlePasswordChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
     this.setState({
       password: event.target.value,
       confirm: '',
@@ -40,7 +66,7 @@ class Account extends React.Component {
     });
   }
 
-  handleInputChange = (event) => {
+  handleInputChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
     const { target } = event;
     const { value, name } = target;
 
@@ -280,21 +306,5 @@ class Account extends React.Component {
     );
   }
 }
-
-Account.propTypes = {
-  handlePassword: PropTypes.func.isRequired,
-  handleEmail: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    email: PropTypes.string.isRequired,
-  }).isRequired,
-  err: PropTypes.shape({
-    password: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-  }).isRequired,
-  waiting: PropTypes.shape({
-    password: PropTypes.bool.isRequired,
-    email: PropTypes.bool.isRequired,
-  }).isRequired,
-};
 
 export default Account;

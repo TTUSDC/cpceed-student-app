@@ -1,6 +1,9 @@
+// @flow
 import React from 'react';
 
-class Events extends React.Component {
+type Props = {};
+
+class Events extends React.Component<Props> {
   render() {
     return (
       <div>

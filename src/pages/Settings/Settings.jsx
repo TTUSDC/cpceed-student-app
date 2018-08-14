@@ -1,5 +1,5 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 
 import Box from 'grommet/components/Box';
@@ -10,8 +10,10 @@ import RequireAuth from 'hoc/RequireAuth.jsx';
 import { AccountContainer } from './routes/Account';
 import { ProfileContainer } from './routes/Profile';
 
-class Settings extends React.Component {
-  navigate = (url) => {
+type Props = { history: { push: (string) => null } };
+
+export class Settings extends React.Component<Props> {
+  navigate = (url: string) => {
     this.props.history.push(url);
   }
 
@@ -58,21 +60,9 @@ class Settings extends React.Component {
   }
 }
 
-Settings.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
 const requiredState = {
   viewSettings: true,
 };
 
-/*
-  Testing components wrapped in HOCs is slightly more complicated than
-  normal. Since each component is tested in a vacuum the HOC won't work
-  properly. So you have to have a pure export for testing purposes.
-*/
-export { Settings };
 // The permissions object is passed as the second argument to RequireAuth
 export default RequireAuth(Settings, requiredState);

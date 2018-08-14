@@ -1,14 +1,30 @@
+// @flow
 import React from 'react';
 import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
 import logger from 'logger.js';
-import PropTypes from 'prop-types';
 
 import { updateUser } from 'redux/actions.js';
 import { Account } from './components';
 
-class AccountContainer extends React.Component {
+type Props = {
+  user: Object,
+  dispatch: (Object) => null,
+};
+
+type State = {
+  err: {
+    email: string,
+    password: string,
+  },
+  waiting: {
+    email: boolean,
+    password: boolean,
+  },
+}
+
+class AccountContainer extends React.Component<Props, State> {
   state = {
     err: {
       email: '',
@@ -109,11 +125,6 @@ class AccountContainer extends React.Component {
     );
   }
 }
-
-AccountContainer.propTypes = {
-  user: PropTypes.shape({}).isRequired,
-  dispatch: PropTypes.func.isRequired,
-};
 
 const getUser = user => user;
 

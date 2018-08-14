@@ -1,5 +1,5 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -28,7 +28,29 @@ const styles = {
   },
 };
 
-export class NavBar extends React.Component {
+type Props = {
+  user: {
+    role: string,
+    name?: string,
+  },
+  classes: Object,
+  navigate: Function,
+  logout: Function,
+};
+
+type State = {
+  openMenu: boolean,
+  auth: boolean,
+  anchorEl: any, // Element
+}
+
+export class NavBar extends React.Component<Props, State> {
+  static defaultProps = {
+    user: {
+      name: '',
+    },
+  };
+
   state = {
     openMenu: false,
     auth: false,
@@ -43,7 +65,7 @@ export class NavBar extends React.Component {
     }));
   }
 
-  toggleOpenMenu = (event) => {
+  toggleOpenMenu = (event: SyntheticEvent<HTMLButtonElement>) => {
     this.setState({
       ...this.state,
       anchorEl: event.currentTarget,
@@ -117,25 +139,5 @@ export class NavBar extends React.Component {
     );
   }
 }
-
-
-NavBar.propTypes = {
-  user: PropTypes.shape({
-    role: PropTypes.string.isRequired,
-    name: PropTypes.string,
-  }).isRequired,
-  classes: PropTypes.shape({}),
-  navigate: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
-};
-
-NavBar.defaultProps = {
-  user: {
-    name: '',
-  },
-  classes: {
-    root: null,
-  },
-};
 
 export default withStyles(styles)(NavBar);

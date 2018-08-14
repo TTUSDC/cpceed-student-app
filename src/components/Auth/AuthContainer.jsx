@@ -1,5 +1,5 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import * as server from 'server';
 import {
@@ -10,22 +10,47 @@ import {
 import logger from 'logger.js';
 import { Auth } from './components';
 
+type Props = {
+  // Handler for when the user wants to finish authenticating
+  authFinished?: Function,
+  // Handler for when the user wants to exit
+  authCancelled: Function,
+};
+
+type State = {
+  // Login Error
+  logErr: string,
+  // Registration Error
+  regErr: string,
+  // Waiting status that will change when XMLHttpRequest are in progress
+  waiting: boolean,
+}
+
 // Handles requests to the server during production and fetching mocks in development
-class AuthContainer extends React.Component {
+class AuthContainer extends React.Component<Props, State> {
+  static defaultProps = {
+    authFinished: null,
+  };
+
   state = {
     logErr: '', // Login Error
     regErr: '', // Registration Error
     waiting: false,
   };
 
-  handleRegister = (data) => {
+  handleRegister = (data: Object) => {
     const { COORDINATOR, STUDENT } = AuthStates;
     this.setState({
+      ...this.state,
       waiting: true,
       regErr: '',
     });
 
-    let userData;
+    let userData = {
+      email: '',
+      name: '',
+    }
+
     switch (data.role) {
       case COORDINATOR:
         userData = coordinator;
@@ -67,7 +92,7 @@ class AuthContainer extends React.Component {
       });
   }
 
-  handleLogin = (email, password) => {
+  handleLogin = (email: string, password: string) => {
     this.setState({
       waiting: true,
       logErr: '',
@@ -104,15 +129,5 @@ class AuthContainer extends React.Component {
   }
 }
 
-AuthContainer.propTypes = {
-  // Handler for when the user wants to finish authenticating
-  authFinished: PropTypes.func,
-  // Handler for when the user wants to exit
-  authCancelled: PropTypes.func.isRequired,
-};
-
-AuthContainer.defaultProps = {
-  authFinished: null,
-};
 
 export default AuthContainer;

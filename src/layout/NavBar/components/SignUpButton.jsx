@@ -1,20 +1,17 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
-
 import Button from '@material-ui/core/Button';
 
+type Props = { toggleAuth: (event: SyntheticEvent<HTMLButtonElement>) => null };
+
 // Opens up the Auth Modal when clicked
-const SignUpButton = (props) => {
+const SignUpButton = (props: Props) => {
   const { toggleAuth } = props;
   return (
     <Button onClick={toggleAuth} color='inherit'>
       Sign Up
     </Button>
   );
-};
-
-SignUpButton.propTypes = {
-  toggleAuth: PropTypes.func.isRequired,
 };
 
 export default SignUpButton;

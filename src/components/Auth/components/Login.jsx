@@ -1,5 +1,5 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -10,13 +10,25 @@ import FormControl from '@material-ui/core/FormControl';
 
 import styles from './Login.styles.js';
 
-class Login extends React.Component {
+type Props = {
+  classes: Object,
+  handleLogin: (email: string, password: string) => null,
+  logErr: string,
+  waiting: boolean,
+};
+
+type State = {
+  email: string,
+  password: string,
+}
+
+class Login extends React.Component<Props, State> {
   state = {
     email: '',
     password: '',
   };
 
-  handleInputChange = name => (event) => {
+  handleInputChange = (name: string) => (event: SyntheticInputEvent<HTMLInputElement>) => {
     this.setState({
       [name]: event.target.value,
     });
@@ -76,16 +88,5 @@ class Login extends React.Component {
     );
   }
 }
-
-Login.propTypes = {
-  classes: PropTypes.shape({}),
-  handleLogin: PropTypes.func.isRequired,
-  logErr: PropTypes.string.isRequired,
-  waiting: PropTypes.bool.isRequired,
-};
-
-Login.defaultProps = {
-  classes: {},
-};
 
 export default withStyles(styles)(Login);

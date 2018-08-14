@@ -1,8 +1,11 @@
+// @flow
 import React from 'react';
 
 import RequireAuth from 'hoc/RequireAuth.jsx';
 
-class Activity extends React.Component {
+type Props = {};
+
+class Activity extends React.Component<Props> {
   render() {
     return (
       <div>

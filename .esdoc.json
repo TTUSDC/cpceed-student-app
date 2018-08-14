@@ -7,7 +7,9 @@
   "title": "cpceed-student-app",
   "lint": false,
   "plugins": [
-    {"name": "esdoc-node"}
+    {
+      "name": "esdoc-node"
+    }
   ],
   "experimentalProposal": {
     "classProperties": true,

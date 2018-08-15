@@ -2,6 +2,7 @@
 import React from 'react';
 
 import * as server from 'server';
+import mockUser from 'server/core/utils/users.mock.js';
 import {
   coordinator,
   student,
@@ -12,9 +13,7 @@ import Auth from './components/Auth.jsx';
 
 type Props = {
   // Handler for when the user wants to finish authenticating
-  authFinished?: Function,
-  // Handler for when the user wants to exit
-  authCancelled: Function,
+  authFinished: (user?: {}) => null,
 };
 
 type State = {
@@ -28,10 +27,6 @@ type State = {
 
 // Handles requests to the server during production and fetching mocks in development
 class AuthContainer extends React.Component<Props, State> {
-  static defaultProps = {
-    authFinished: null,
-  };
-
   state = {
     logErr: '', // Login Error
     regErr: '', // Registration Error
@@ -51,6 +46,7 @@ class AuthContainer extends React.Component<Props, State> {
       name: '',
     }
 
+    // Gets the template for the user depending on their role
     switch (data.role) {
       case COORDINATOR:
         userData = coordinator;
@@ -79,12 +75,15 @@ class AuthContainer extends React.Component<Props, State> {
       .then(() => {
         logger.info('User was logged in');
 
-        if (this.props.authFinished) {
-          this.props.authFinished();
-        }
+        this.props.authFinished(userData);
+        this.setState({
+          ...this.state,
+          waiting: false,
+        })
       })
       .catch((e) => {
         logger.error(e.message);
+        this.props.authFinished();
         this.setState({
           regErr: e.message,
           waiting: false,
@@ -102,12 +101,19 @@ class AuthContainer extends React.Component<Props, State> {
       .then(() => {
         logger.info('User was logged in');
 
-        if (this.props.authFinished) {
-          this.props.authFinished();
-        }
+        // this part is missing, we need to get the user from the localStorage's JWT
+        // Temporary: just close the modal for now
+        // Temporary: using test user from tests
+        //
+        // We need login to resolve with the user object
+        // from the server
+        //
+        // this.props.authFinished(foundUser)
+        this.props.authFinished();
       })
       .catch((e) => {
         logger.error(e.message);
+        this.props.authFinished();
         this.setState({
           logErr: e.message,
           waiting: false,
@@ -120,7 +126,7 @@ class AuthContainer extends React.Component<Props, State> {
       <Auth
         handleRegister={this.handleRegister}
         handleLogin={this.handleLogin}
-        authCancelled={this.props.authCancelled}
+        authFinished={this.props.authFinished}
         regErr={this.state.regErr}
         logErr={this.state.logErr}
         waiting={this.state.waiting}
@@ -128,6 +134,5 @@ class AuthContainer extends React.Component<Props, State> {
     );
   }
 }
-
 
 export default AuthContainer;

@@ -5,6 +5,7 @@ import Events from 'pages/Events';
 import Activity from 'pages/Activity';
 import Settings from 'pages/Settings';
 
+
 // Handles all the routing which will display the routes in the body of the page
 const ContentContainer = () => (
   <React.Fragment>
@@ -18,9 +19,18 @@ const ContentContainer = () => (
     />
 
     {/* Set the children of the primary component */}
-    <Route path='/events' component={Events} />
-    <Route path='/activity' component={Activity} />
-    <Route path='/settings' component={Settings} />
+    <Route
+      path='/events'
+      component={Events}
+    />
+    <Route
+      path='/activity'
+      component={Activity}
+    />
+    <Route
+      path='/settings'
+      component={Settings}
+    />
   </React.Fragment>
 );
 

@@ -1,6 +1,11 @@
 // @flow
 import React from 'react';
 
+import { Permissions } from 'redux/actions.js';
+import { SETTINGS_REQUIRED_PERMS, ACTIVITY_REQUIRED_PERMS } from '_constants/privateRoutes.js';
+
+import logger from 'logger.js';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -29,41 +34,40 @@ const styles = {
 };
 
 type Props = {
+  // Redux: Used to toggle opening and closing the login page
+  // These three props help determine whether or not the modal is open
+  authStart: () => null,
+  authFinished: () => null,
+  showAuthModal: boolean,
+  // Redux: User Object
   user: {
     role: string,
     name?: string,
   },
+  // Material UI: styles
   classes: Object,
-  navigate: Function,
-  logout: Function,
+  // Redux: navigate by pushing to the url stack
+  navigate: (url: string, permissions?: Permissions) => any,
+  // Redux: log the user out
+  logout: () => any,
 };
 
 type State = {
   openMenu: boolean,
-  auth: boolean,
   anchorEl: any, // Element
 }
 
 export class NavBar extends React.Component<Props, State> {
   static defaultProps = {
     user: {
-      name: '',
+      name: 'Guest',
     },
   };
 
   state = {
     openMenu: false,
-    auth: false,
     anchorEl: null,
   };
-
-  // Toggles openning and closing the Login prompt
-  toggleAuth = () => {
-    this.setState(prevState => ({
-      ...this.state,
-      auth: !prevState.auth,
-    }));
-  }
 
   toggleOpenMenu = (event: SyntheticEvent<HTMLButtonElement>) => {
     this.setState({
@@ -83,20 +87,19 @@ export class NavBar extends React.Component<Props, State> {
     this.props.logout();
   }
 
-  handleSettingsNavigation = () => {
-    this.props.navigate('settings/');
-  }
-
-  toggleModal = () => {
-    this.setState({
-      ...this.state,
-      auth: !this.state.auth,
-    });
+  handleNavigation = (url: string, permissions?: Permissions) => () => {
+    if (permissions) logger.info(permissions)
+    this.props.navigate(url, permissions);
   }
 
   render() {
-    const { anchorEl, auth } = this.state;
-    const { classes } = this.props;
+    const { anchorEl } = this.state;
+    const {
+      classes,
+      showAuthModal,
+      authStart,
+      authFinished
+    } = this.props;
 
     return (
       <div className={classes.root}>
@@ -112,8 +115,11 @@ export class NavBar extends React.Component<Props, State> {
               open={Boolean(anchorEl)}
               onClose={this.handleClose}
             >
-              <MenuItem onClick={this.handleSettingsNavigation}>
+              <MenuItem onClick={this.handleNavigation('/settings', SETTINGS_REQUIRED_PERMS)}>
                 Settings
+              </MenuItem>
+              <MenuItem onClick={this.handleNavigation('/activity', ACTIVITY_REQUIRED_PERMS)}>
+                Activity
               </MenuItem>
               <MenuItem onClick={this.handleLogout}>
                 Logout
@@ -124,13 +130,12 @@ export class NavBar extends React.Component<Props, State> {
             </Typography>
             {
               this.props.user.role === GUEST
-                ? <SignUpButton toggleAuth={this.toggleAuth} />
+                ? <SignUpButton toggleAuth={authStart} />
                 : <AccountButton />
             }
-            <ModalView open={auth} toggle={this.toggleModal}>
+            <ModalView open={showAuthModal} closeModal={authFinished}>
               <AuthContainer
-                authCancelled={this.toggleAuth}
-                authFinished={this.toggleAuth}
+                authFinished={authFinished}
               />
             </ModalView>
           </Toolbar>

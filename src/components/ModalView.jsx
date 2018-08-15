@@ -19,7 +19,7 @@ export type Props = {
   // state of the container component
   open: boolean,
   // Toggles the open state
-  toggle: () => null,
+  closeModal: () => null,
   // Material JSS Classes
   classes: Object,
   // Content of the Modal
@@ -36,16 +36,19 @@ export const ModalView = (props: Props) => {
     open,
     classes,
     children,
-    toggle,
+    closeModal,
     fullScreen,
   } = props;
+
+  // Do not pass event as an argument
+  const handleClosing = () => closeModal();
 
   return (
     <Dialog
       fullScreen={fullScreen}
       open={open}
       className={classes.root}
-      onClose={toggle}
+      onClose={handleClosing}
     >
       <DialogContent>
         {/* For forms you want to render a DialogContentText along with a Input component */}
@@ -53,7 +56,7 @@ export const ModalView = (props: Props) => {
       </DialogContent>
       <DialogActions>
         {/* Closes the Modal when you click the close button or hit Esc */}
-        <Button className='close-button' onClick={toggle}>
+        <Button className='close-button' onClick={handleClosing}>
           Close
         </Button>
       </DialogActions>

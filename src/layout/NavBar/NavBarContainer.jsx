@@ -2,14 +2,32 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+  // Actions
+  navigate,
+  openAuthModal,
+  closeAuthModal,
+  // Types
+  Permissions
+} from 'redux/actions.js';
+import { push } from 'connected-react-router';
 
 import * as server from 'server';
 import logger from 'logger.js';
 import { NavBar } from './components';
 
 type Props = {
-  user: Object,
-  history: { push: (string) => null },
+  // Redux: User object
+  user: {},
+  // Determines whether or not the prompt is open
+  showAuthModal: boolean,
+  // Redux: Open Auth Modal
+  openAuthModal: () => null,
+  // Redux: Close Auth Modal
+  closeAuthModal: () => null,
+  // Redus: Navigation action from redux
+  navigate: (url: string, permissions?: Permissions) => null,
 };
 
 class NavBarContainer extends React.Component<Props> {
@@ -17,17 +35,9 @@ class NavBarContainer extends React.Component<Props> {
     TODO: Let redux router handle this so that routing also becomes a function of state
     Navigates by pushing the relative URL to the router.
 
-    navigate needs to be wrapped in an arrow function before being passed
-    to onClick because it has a custom parameter. onClick only passes an
-    event, so it won't know how to supply other parameters. But you can't
-    add parentheses to navigate because that would call it rather than
-    passing it as a variable. Arrow functions allow navigate to have
-    parentheses because they wrap it in a variable, so the function call
-    doesn't happen until the variable is called as a function.
+    NavBarContainer also handles the private routing.
+    Declare private routes above
   */
-  navigate = (url) => {
-    this.props.history.push(url);
-  }
 
   logout = () => {
     logger.info('Logging out...');
@@ -39,7 +49,7 @@ class NavBarContainer extends React.Component<Props> {
         logger.error(e.message);
       });
 
-    this.props.history.push('/');
+    this.props.navigate('/');
   }
 
   render() {
@@ -51,8 +61,11 @@ class NavBarContainer extends React.Component<Props> {
         from NavBar.js, the context switches back to NavBarContainer.js.
       */
       <NavBar
+        authStart={this.props.openAuthModal}
+        authFinished={this.props.closeAuthModal}
+        showAuthModal={this.props.showAuthModal}
         user={this.props.user}
-        navigate={this.navigate}
+        navigate={this.props.navigate}
         logout={this.logout}
       />
     );
@@ -62,8 +75,20 @@ class NavBarContainer extends React.Component<Props> {
 // Used by connect to map user to this.props.user
 function mapStateToProps(state) {
   return {
-    user: state.user,
+    user: state.userReducer,
+    showAuthModal: state.authReducer.openModal,
   };
 }
 
-export default withRouter(connect(mapStateToProps)(NavBarContainer));
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    navigate,
+    openAuthModal,
+    closeAuthModal,
+  }, dispatch)
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NavBarContainer);

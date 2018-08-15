@@ -1,6 +1,7 @@
 /* eslint-disable */
 import update from 'immutability-helper';
 
+import { combineReducers } from 'redux';
 import logger from 'logger.js';
 import {
   AuthStates,
@@ -9,8 +10,9 @@ import {
   guest,
 } from './actions.js';
 
-const selectUser = (state = guest, action) => {
+const userReducer = (state = guest, action) => {
   switch(action.type) {
+    // Update the user with the correct permisions and credentials
     case UserActionTypes.UPDATE:
       var user = action.user;
 
@@ -19,6 +21,7 @@ const selectUser = (state = guest, action) => {
           user.permissions = PermissionStates.GUEST;
           break;
         case AuthStates.STUDENT:
+          user.email = 'another@gmail.com';
           user.permissions = PermissionStates.STUDENT;
           break;
         case AuthStates.COORDINATOR:
@@ -29,12 +32,6 @@ const selectUser = (state = guest, action) => {
       }
 
       return update(state, { $set: user });
-    case UserActionTypes.LOGOUT:
-      var user = action.user;
-
-      user.permissions = PermissionStates.GUEST;
-
-      return update(state, { $set: user });
     default:
       state.permissions = PermissionStates.GUEST;
 
@@ -42,8 +39,18 @@ const selectUser = (state = guest, action) => {
   }
 };
 
-const cpceedApp = (state = {}, action) => ({
-  user: selectUser(state.user, action),
-});
+function authReducer(state = { openModal: false }, action) {
+  switch(action.type) {
+    case UserActionTypes.TOGGLE_AUTH:
+      return update(state, { openModal: { $set: action.openModal } })
+    default:
+      return state;
+  }
+}
+
+const cpceedApp = combineReducers({
+  userReducer,
+  authReducer,
+})
 
 export default cpceedApp;

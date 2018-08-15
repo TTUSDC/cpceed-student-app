@@ -6,7 +6,6 @@ import Box from 'grommet/components/Box';
 import Header from 'grommet/components/Header';
 import Button from 'grommet/components/Button';
 
-import RequireAuth from 'hoc/RequireAuth.jsx';
 import { AccountContainer } from './routes/Account';
 import { ProfileContainer } from './routes/Profile';
 
@@ -60,9 +59,4 @@ export class Settings extends React.Component<Props> {
   }
 }
 
-const requiredState = {
-  viewSettings: true,
-};
-
-// The permissions object is passed as the second argument to RequireAuth
-export default RequireAuth(Settings, requiredState);
+export default Settings;

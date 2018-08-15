@@ -1,3 +1,5 @@
+// TODO: Currently broken since firebase is not setup
+// Are we going to change this anytime soon?
 // @flow
 import React from 'react';
 import * as firebase from 'firebase';

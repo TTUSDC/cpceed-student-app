@@ -1,3 +1,4 @@
+// Logic moved to FormCheck. Will delete when Account no longer depends on this module
 export const checkEmail = (email) => {
   let output = '';
 

@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import Account from 'pages/Settings/routes/Account/components/Account.jsx';
+import Account from './Account.jsx';
 
 describe('Account.jsx', () => {
   let props;

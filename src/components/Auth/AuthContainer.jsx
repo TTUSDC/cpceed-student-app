@@ -2,7 +2,6 @@
 import React from 'react';
 
 import * as server from 'server';
-import mockUser from 'server/core/utils/users.mock.js';
 import {
   coordinator,
   student,

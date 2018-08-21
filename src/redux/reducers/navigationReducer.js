@@ -1,5 +1,4 @@
 import update from 'immutability-helper';
-import logger from 'logger.js';
 
 import { NavigationActionTypes } from 'redux/actions/navigationActions';
 

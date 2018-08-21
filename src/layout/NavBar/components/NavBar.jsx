@@ -95,7 +95,6 @@ export class NavBar extends React.Component<Props, State> {
       showAuthModal,
       authStart,
       authFinished,
-      user,
     } = this.props;
 
     return (

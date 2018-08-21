@@ -6,7 +6,6 @@ import {
   // Types
   Permissions,
   // Actions
-  navigate,
   startNavigation,
   endNavigation,
   openAuthModal,
@@ -116,7 +115,7 @@ class NavBarContainer extends React.Component<Props> {
 // Used by connect to map user to this.props.user
 const mapStateToProps = (state) => {
   // State originating from the Navigation Reducer
-  const { showAuthModal, nextPage, navigationChange } = state.navigationReducer;
+  const { showAuthModal, nextPage } = state.navigationReducer;
 
   // State originating from the User Reducer
   const { user, isAuthenticated } = state.userReducer;

@@ -1,9 +1,8 @@
 // TODO: Move user's state to localStorge using JWT
 
 import RESTRICTIONS from '_constants/privateRoutes';
-import { updateUser, checkAuthStatus, UserActionTypes } from './userActions';
+import { checkAuthStatus } from './userActions';
 import { push } from 'connected-react-router';
-import logger from 'logger.js';
 
 export const NavigationActionTypes = {
   TOGGLE_AUTH: 'TOGGLE_AUTH',

@@ -76,19 +76,18 @@ class AuthContainer extends React.Component<Props, State> {
         logger.info('User was logged in');
 
         this.props.authFinished(userData);
-        this.setState({
-          ...this.state,
-          waiting: false,
-        })
       })
       .catch((e) => {
         logger.error(e.message);
         this.props.authFinished();
+        return Promise.resolve(e.message)
+      })
+      .finally((regErr) => {
         this.setState({
-          regErr: e.message,
+          regErr: regErr || '',
           waiting: false,
         });
-      });
+      })
   }
 
   handleLogin = (email: string, password: string) => {
@@ -114,11 +113,14 @@ class AuthContainer extends React.Component<Props, State> {
       .catch((e) => {
         logger.error(e.message);
         this.props.authFinished();
+        return Promise.resolve(e.message)
+      })
+      .finally((logErr) => {
         this.setState({
-          logErr: e.message,
+          logErr: logErr || '',
           waiting: false,
         });
-      });
+      })
   }
 
   render() {

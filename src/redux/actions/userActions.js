@@ -103,19 +103,27 @@ export const saveUser = user => ({
 /**
  * Changes isAuthenticated depending on the current restrictions to the saved in Redux
  */
-export const checkAuthStatus = () => (dispatch, getState) => Promise.resolve()
+export const checkAuthStatus = restrictions => (dispatch, getState) => Promise.resolve()
   .then(() => {
+    let currentRestrictions;
     // Extract the current state
-    const { restrictions } = getState().navigationReducer;
+    if (restrictions) {
+      currentRestrictions = restrictions;
+    } else {
+      currentRestrictions = getState().navigationReducer.restrictions;
+    }
+
+    logger.info(currentRestrictions);
+
     const { user } = getState().userReducer;
 
     // Default
     let status = true;
 
     // Only check for the restrictions if there are some
-    if (restrictions) {
-      Object.keys(restrictions).forEach((key) => {
-        if (user.permissions[key] !== restrictions[key]) {
+    if (currentRestrictions) {
+      Object.keys(currentRestrictions).forEach((key) => {
+        if (user.permissions[key] !== currentRestrictions[key]) {
           status = false;
         }
       });

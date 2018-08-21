@@ -53,6 +53,7 @@ function navigationReducer(state = initialState, action) {
       break;
     case FINISH_NAV:
       newState = update(state, {
+        navigationChange: { $set: null },
         nextPage: { $set: null },
         restrictions: { $set: null },
       });

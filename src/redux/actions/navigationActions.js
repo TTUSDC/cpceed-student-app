@@ -1,5 +1,7 @@
 // TODO: Move user's state to localStorge using JWT
 
+import logger from 'logger';
+
 import RESTRICTIONS from '_constants/privateRoutes';
 import { checkAuthStatus } from './userActions';
 import { push } from 'connected-react-router';
@@ -30,18 +32,30 @@ export const openAuthModal = () => ({
 /**
  * Closes Modal
  *
+ * @param {boolean} failedAuth - signals when the user closes authModal wihtout
+ * correctly authenticating
+ *
  * @return {string} type - action type
  * @return {boolean} payload.showAuthModal - determines if the modal is open or not
  */
-export const closeAuthModal = () => ({
-  type: NavigationActionTypes.TOGGLE_AUTH,
-  payload: {
-    showAuthModal: false,
-  },
-})
+export const closeAuthModal = (failedAuth) => (dispatch) => Promise.resolve()
+  .then(() => {
+    dispatch({
+      type: NavigationActionTypes.TOGGLE_AUTH,
+      payload: {
+        showAuthModal: false,
+      },
+    })
+  })
+  .then(() => {
+    if (failedAuth) {
+      dispatch(rememberFutureRoute(null, null))
+    }
+  })
 
-export const updateRestrictions = (url) => (dispatch, getState) => {
-  const restrictions = RESTRICTIONS[url]
+export const updateRestrictions = () => (dispatch, getState) => {
+  const { pathname } = getState().router.location;
+  const restrictions = RESTRICTIONS[pathname]
   dispatch({
     type: NavigationActionTypes.UPDATE_RESTRICTIONS,
     payload: { restrictions },
@@ -79,6 +93,10 @@ export const rememberFutureRoute = (nextPage, restrictions) => ({
  */
 export const startNavigation = (url: string, restrictions?: Permissions) => (dispatch, getState) =>  Promise.resolve()
   .then(() => {
+    logger.info('starting navigation for private route', url)
+    dispatch(checkAuthStatus(restrictions))
+  })
+  .then(() => {
     // if there are no restrictions or if the user is already authorized, navigate immediately
     if (!restrictions || getState().userReducer.isAuthenticated) {
       // Stops here when there are no restrictions passed
@@ -110,13 +128,14 @@ export const startNavigation = (url: string, restrictions?: Permissions) => (dis
  */
 export const endNavigation = () => dispatch => Promise.resolve()
   .then(() => {
-    dispatch(checkAuthStatus());
-  })
-  .then(() => {
+    console.log('ending Navigation from action')
     dispatch(closeAuthModal())
   })
   .then(() => {
     dispatch({
       type: NavigationActionTypes.FINISH_NAV
     })
+  })
+  .then(() => {
+    dispatch(clearNavigation())
   })

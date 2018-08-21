@@ -10,7 +10,10 @@ import {
   endNavigation,
   openAuthModal,
   closeAuthModal,
+  clearNavigation,
+  updateRestrictions,
 } from 'redux/actions/navigationActions';
+import { checkAuthStatus } from 'redux/actions/userActions';
 import { push } from 'connected-react-router';
 
 import * as server from 'server';
@@ -26,6 +29,8 @@ type Props = {
   showAuthModal: boolean,
   // Redux-State: Determines if the user has proper permissions to access the page
   isAuthenticated: boolean,
+  // Redux-State: A trigger for handling continuous routing
+  navigationChange: boolean,
 
   // Connected-Router: Pushes to the given url
   push: (url: string) => null,
@@ -39,6 +44,11 @@ type Props = {
   // Redux-Action: Signals redux to stop the navigation by clearing nextPage,
   // closing the modal and clear isAuthenticated
   endNavigation: () => null,
+  // Redux-Action: gets the restrictions for the current page
+  updateRestrictions: () => null,
+
+  // Enchanced Navigation with permission checking
+  navigate: (url: string, restrictions?: Permissions) => null,
 };
 
 class NavBarContainer extends React.Component<Props> {
@@ -46,20 +56,47 @@ class NavBarContainer extends React.Component<Props> {
     nextPage: null,
   }
 
+  constructor(props) {
+    super(props);
+
+    this.handleRouteChanges();
+    props.checkAuthStatus();
+    if (!props.isAuthenticated) props.push('/events');
+    props.clearNavigation();
+  }
+
   /**
    * Allow the user to continue to the requested URL when they have
    * the correct permissions and the nextPage prop
    *
-   * Will not run when the nextPage prop is cleared at the end of the
-   * cycle
+   * Once the user navigates, we have to clear the props that navigation depends on
+   *
    */
   componentDidUpdate() {
+    const { nextPage, isAuthenticated, endNavigation } = this.props;
+    if (nextPage && isAuthenticated) {
+      this.navigate(nextPage);
+      endNavigation();
+    }
+  }
+
+
+  componentDidMount() {
     const { nextPage, isAuthenticated, endNavigation } = this.props;
 
     // If there is a page enqueue and the user has the right permissions
     if (nextPage && isAuthenticated) {
-      console.log('user is authenticated and now moving to next page')
       this.navigate(nextPage);
+      endNavigation()
+    }
+
+    this.handleRouteChanges()
+  }
+
+  handleRouteChanges = () => {
+    const { openAuthModal, endNavigation, navigationChange, updateRestrictions } = this.props;
+    if (navigationChange) {
+      updateRestrictions()
       endNavigation()
     }
   }
@@ -74,11 +111,9 @@ class NavBarContainer extends React.Component<Props> {
     if (!restrictions) {
       push(url)
     } else {
-      console.log('starting navigation for private route', url)
       startNavigation(url, restrictions)
     }
   }
-
   logout = () => {
     logger.info('Logging out...');
     server.logout()
@@ -115,12 +150,12 @@ class NavBarContainer extends React.Component<Props> {
 // Used by connect to map user to this.props.user
 const mapStateToProps = (state) => {
   // State originating from the Navigation Reducer
-  const { showAuthModal, nextPage } = state.navigationReducer;
+  const { showAuthModal, nextPage, navigationChange } = state.navigationReducer;
 
   // State originating from the User Reducer
   const { user, isAuthenticated } = state.userReducer;
 
-  return { showAuthModal, nextPage, isAuthenticated, user }
+  return { showAuthModal, nextPage, isAuthenticated, user, navigationChange }
 }
 
 const  mapDispatchToProps = (dispatch) => bindActionCreators({
@@ -129,6 +164,9 @@ const  mapDispatchToProps = (dispatch) => bindActionCreators({
   endNavigation,
   openAuthModal,
   closeAuthModal,
+  clearNavigation,
+  updateRestrictions,
+  checkAuthStatus,
 }, dispatch)
 
 export default connect(

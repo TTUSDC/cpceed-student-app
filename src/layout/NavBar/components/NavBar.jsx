@@ -36,7 +36,7 @@ type Props = {
   // Redux: Used to toggle opening and closing the login page
   // These three props help determine whether or not the modal is open
   authStart: () => null,
-  authFinished: () => null,
+  authFinished: (closeMethod: string) => null,
   showAuthModal: boolean,
 
   // Redux: User Object
@@ -88,6 +88,10 @@ export class NavBar extends React.Component<Props, State> {
     this.props.navigate(url, permissions);
   }
 
+  handleModalClose = (closeMethod: string) => {
+    this.props.authFinished(closeMethod)
+  }
+
   render() {
     const { anchorEl } = this.state;
     const {
@@ -134,7 +138,7 @@ export class NavBar extends React.Component<Props, State> {
                 ? <SignUpButton toggleAuth={authStart} />
                 : <AccountButton />
             }
-            <ModalView open={showAuthModal} closeModal={authFinished}>
+            <ModalView open={showAuthModal} closeModal={this.handleModalClose}>
               <AuthContainer authFinished={authFinished} />
             </ModalView>
           </Toolbar>

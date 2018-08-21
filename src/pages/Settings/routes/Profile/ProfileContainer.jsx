@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import * as server from 'server';
-import { updateUser } from 'redux/actions.js';
+import { updateUser } from 'redux/actions/userActions';
 import logger from 'logger.js';
 import { Profile } from './components';
 
@@ -67,10 +67,8 @@ class ProfileContainer extends React.Component<Props, State> {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    user: state.user,
-  };
-}
+const  mapStateToProps = (state) => ({
+  user: state.userReducer,
+})
 
 export default connect(mapStateToProps)(ProfileContainer);

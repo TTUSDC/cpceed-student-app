@@ -1,5 +1,6 @@
 import { createBrowserHistory } from 'history';
-import { applyMiddleware, compose, createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools as compose } from 'redux-devtools-extension';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 
 import createReduxWaitForMiddleware from 'redux-wait-for-action';
@@ -8,9 +9,10 @@ import thunk from 'redux-thunk';
 
 import { createLogger } from 'redux-logger';
 
-import cpceedApp from 'redux/reducers.js';
+import cpceedApp from 'redux/reducer.js';
 
 export const history = createBrowserHistory();
+
 const logger = createLogger({
   // options
   level: 'info',

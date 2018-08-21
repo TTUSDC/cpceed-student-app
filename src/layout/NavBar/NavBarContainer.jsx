@@ -1,16 +1,17 @@
 // @flow
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
+  // Types
+  Permissions,
   // Actions
   navigate,
+  startNavigation,
+  endNavigation,
   openAuthModal,
   closeAuthModal,
-  // Types
-  Permissions
-} from 'redux/actions.js';
+} from 'redux/actions/navigationActions';
 import { push } from 'connected-react-router';
 
 import * as server from 'server';
@@ -18,26 +19,64 @@ import logger from 'logger.js';
 import { NavBar } from './components';
 
 type Props = {
-  // Redux: User object
+  // Redux-State: User object
   user: {},
-  // Determines whether or not the prompt is open
+  // Redux-State: The page that the user wants to go to
+  nextPage?: string,
+  // Redux-State: Determines whether or not the prompt is open
   showAuthModal: boolean,
-  // Redux: Open Auth Modal
+  // Redux-State: Determines if the user has proper permissions to access the page
+  isAuthenticated: boolean,
+
+  // Connected-Router: Pushes to the given url
+  push: (url: string) => null,
+
+  // Redux-Action: Open Auth Modal
   openAuthModal: () => null,
-  // Redux: Close Auth Modal
-  closeAuthModal: () => null,
-  // Redus: Navigation action from redux
-  navigate: (url: string, permissions?: Permissions) => null,
+  // Redux-Action: Close Auth Modal with an optional new user
+  closeAuthModal: (user?: {}) => Promise<null>,
+  // Redux-Action: Signals redux to start navigation
+  startNavigation: (url: string, restrictions?: Permissions) => null,
+  // Redux-Action: Signals redux to stop the navigation by clearing nextPage,
+  // closing the modal and clear isAuthenticated
+  endNavigation: () => null,
 };
 
 class NavBarContainer extends React.Component<Props> {
-  /*
-    TODO: Let redux router handle this so that routing also becomes a function of state
-    Navigates by pushing the relative URL to the router.
+  static defaultProps = {
+    nextPage: null,
+  }
 
-    NavBarContainer also handles the private routing.
-    Declare private routes above
-  */
+  /**
+   * Allow the user to continue to the requested URL when they have
+   * the correct permissions and the nextPage prop
+   *
+   * Will not run when the nextPage prop is cleared at the end of the
+   * cycle
+   */
+  componentDidUpdate() {
+    const { nextPage, isAuthenticated, endNavigation } = this.props;
+    if (nextPage && isAuthenticated) {
+      console.log('user is authenticated and now moving to next page')
+      this.navigate(nextPage);
+      endNavigation()
+    }
+  }
+
+  /**
+   * Navigates by pushing the relative URL to the router.
+   * NavBarContainer also handles the private routing.
+   * Declare private routes above
+   */
+  navigate = (url: string, restrictions?: Permissions) => {
+    const { startNavigation, push } = this.props;
+    if (!restrictions) {
+      push(url)
+    } else {
+      console.log('starting navigation for private route', url)
+      startNavigation(url, restrictions)
+    }
+  }
 
   logout = () => {
     logger.info('Logging out...');
@@ -49,7 +88,7 @@ class NavBarContainer extends React.Component<Props> {
         logger.error(e.message);
       });
 
-    this.props.navigate('/');
+    this.navigate('/');
   }
 
   render() {
@@ -65,7 +104,7 @@ class NavBarContainer extends React.Component<Props> {
         authFinished={this.props.closeAuthModal}
         showAuthModal={this.props.showAuthModal}
         user={this.props.user}
-        navigate={this.props.navigate}
+        navigate={this.navigate}
         logout={this.logout}
       />
     );
@@ -73,20 +112,23 @@ class NavBarContainer extends React.Component<Props> {
 }
 
 // Used by connect to map user to this.props.user
-function mapStateToProps(state) {
-  return {
-    user: state.userReducer,
-    showAuthModal: state.authReducer.openModal,
-  };
+const mapStateToProps = (state) => {
+  // State originating from the Navigation Reducer
+  const { showAuthModal, nextPage, navigationChange } = state.navigationReducer;
+
+  // State originating from the User Reducer
+  const { user, isAuthenticated } = state.userReducer;
+
+  return { showAuthModal, nextPage, isAuthenticated, user }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    navigate,
-    openAuthModal,
-    closeAuthModal,
-  }, dispatch)
-}
+const  mapDispatchToProps = (dispatch) => bindActionCreators({
+  push,
+  startNavigation,
+  endNavigation,
+  openAuthModal,
+  closeAuthModal,
+}, dispatch)
 
 export default connect(
   mapStateToProps,

@@ -7,7 +7,7 @@ import {
   coordinator,
   student,
   AuthStates,
-} from 'redux/actions.js';
+} from 'redux/actions/userActions';
 import logger from 'logger.js';
 import Auth from './components/Auth.jsx';
 
@@ -28,8 +28,8 @@ type State = {
 // Handles requests to the server during production and fetching mocks in development
 class AuthContainer extends React.Component<Props, State> {
   state = {
-    logErr: '', // Login Error
-    regErr: '', // Registration Error
+    logErr: '',
+    regErr: '',
     waiting: false,
   };
 

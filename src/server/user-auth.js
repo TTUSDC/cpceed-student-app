@@ -1,5 +1,5 @@
 import store from 'redux/store.js';
-import { updateUser, logoutUser } from 'redux/actions';
+import { updateUser, logoutUser } from 'redux/actions/userActions';
 import Connection from 'server/core/connection';
 
 // Will default to passing an fake user when not in production

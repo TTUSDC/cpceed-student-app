@@ -4,7 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
-import { AuthStates } from 'redux/actions.js';
+import { AuthStates } from 'redux/actions/userActions';
 
 type Props = {
   // The name of the Input

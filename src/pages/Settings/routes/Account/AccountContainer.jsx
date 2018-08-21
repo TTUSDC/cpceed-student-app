@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import update from 'immutability-helper';
 import logger from 'logger.js';
 
-import { updateUser } from 'redux/actions.js';
+import { updateUser } from 'redux/actions/userActions';
 import { Account } from './components';
 
 type Props = {
@@ -128,10 +128,9 @@ class AccountContainer extends React.Component<Props, State> {
   }
 }
 
-const getUser = user => user;
-
-const mapStateToProps = state => ({
-  user: getUser(state.user),
-});
+const mapStateToProps = state => {
+  const { user } = state.userReducer;
+  return { user };
+}
 
 export default connect(mapStateToProps)(AccountContainer);

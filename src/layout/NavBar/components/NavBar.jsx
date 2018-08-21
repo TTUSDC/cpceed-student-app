@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import { Permissions } from 'redux/actions.js';
+import { Permissions, AuthStates } from 'redux/actions/userActions';
 import { SETTINGS_REQUIRED_PERMS, ACTIVITY_REQUIRED_PERMS } from '_constants/privateRoutes.js';
 
 import logger from 'logger.js';
@@ -17,7 +17,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 // Multi-use components
 import { ModalView, AuthContainer } from 'components/';
-import { AuthStates } from 'redux/actions.js';
 
 // Single-use components
 import { AccountButton, SignUpButton } from 'layout/NavBar/components';
@@ -39,11 +38,13 @@ type Props = {
   authStart: () => null,
   authFinished: () => null,
   showAuthModal: boolean,
+
   // Redux: User Object
   user: {
     role: string,
-    name?: string,
+    name: string,
   },
+
   // Material UI: styles
   classes: Object,
   // Redux: navigate by pushing to the url stack
@@ -58,11 +59,6 @@ type State = {
 }
 
 export class NavBar extends React.Component<Props, State> {
-  static defaultProps = {
-    user: {
-      name: 'Guest',
-    },
-  };
 
   state = {
     openMenu: false,
@@ -98,7 +94,8 @@ export class NavBar extends React.Component<Props, State> {
       classes,
       showAuthModal,
       authStart,
-      authFinished
+      authFinished,
+      user,
     } = this.props;
 
     return (
@@ -115,6 +112,9 @@ export class NavBar extends React.Component<Props, State> {
               open={Boolean(anchorEl)}
               onClose={this.handleClose}
             >
+              <MenuItem onClick={this.handleNavigation('/events')}>
+                Events
+              </MenuItem>
               <MenuItem onClick={this.handleNavigation('/settings', SETTINGS_REQUIRED_PERMS)}>
                 Settings
               </MenuItem>
@@ -129,14 +129,14 @@ export class NavBar extends React.Component<Props, State> {
               CPCEED!
             </Typography>
             {
+              // If the user is logged in, show the AccountButton
+              // TODO: Make sure to fix teh Account Menu
               this.props.user.role === GUEST
                 ? <SignUpButton toggleAuth={authStart} />
                 : <AccountButton />
             }
             <ModalView open={showAuthModal} closeModal={authFinished}>
-              <AuthContainer
-                authFinished={authFinished}
-              />
+              <AuthContainer authFinished={authFinished} />
             </ModalView>
           </Toolbar>
         </AppBar>

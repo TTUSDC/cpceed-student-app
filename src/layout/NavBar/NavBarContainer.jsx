@@ -56,6 +56,8 @@ class NavBarContainer extends React.Component<Props> {
    */
   componentDidUpdate() {
     const { nextPage, isAuthenticated, endNavigation } = this.props;
+
+    // If there is a page enqueue and the user has the right permissions
     if (nextPage && isAuthenticated) {
       console.log('user is authenticated and now moving to next page')
       this.navigate(nextPage);

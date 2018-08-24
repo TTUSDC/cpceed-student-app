@@ -134,8 +134,8 @@ export class Account extends React.Component<Props, State> {
       })
   }
 
-  errorHandler = (message) => {
-    // TODO: Display a global Error
+  errorHandler = (message: string) => {
+    // TODO: Display a global error through Redux
     logger.error(message)
   }
 

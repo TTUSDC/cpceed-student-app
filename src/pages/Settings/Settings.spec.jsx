@@ -10,6 +10,7 @@ describe('Settings.jsx', () => {
     const push = sinon.spy();
     const history = {
       push,
+      location: { pathname: '' },
     };
 
     const wrapper = shallow(<Settings history={history} />);

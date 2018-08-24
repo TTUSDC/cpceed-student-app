@@ -5,9 +5,8 @@ import { Route, Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import RestoreIcon from '@material-ui/icons/Restore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
+import FaceIcon from '@material-ui/icons/Face';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 import RequireAuth from 'hoc/RequireAuth.jsx';
 import { AccountContainer } from './routes/Account';
@@ -16,7 +15,10 @@ import { ProfileContainer } from './routes/Profile';
 type Props = {
   // History API used for pushing routes
   history: {
-    push: (string) => null
+    push: (string) => null,
+    location: {
+      pathname: string
+    }
   },
   // Material-UI Styles
   classes: Object
@@ -28,8 +30,20 @@ type State = {
 }
 
 export class Settings extends React.Component<Props, State> {
+  // Should match given style, or test will fail
+  static defaultProps = {
+    classes: {
+      root: {}
+    }
+  }
   state = {
     value: 1,
+  }
+  componentDidMount() {
+    const { pathname } = this.props.history.location
+    this.setState({
+      value: pathname === '/settings/profile' ? 0 : 1,
+    })
   }
   navigate = (url: string) => {
     this.props.history.push(url);
@@ -62,14 +76,14 @@ export class Settings extends React.Component<Props, State> {
         >
           <BottomNavigationAction
             label='Profile'
-            icon={<RestoreIcon />}
+            icon={<FaceIcon />}
             onClick={() => {
               this.navigate('/settings/profile');
             }}
           />
           <BottomNavigationAction
             label='Account'
-            icon={<FavoriteIcon />}
+            icon={<SupervisorAccountIcon />}
             onClick={() => {
               this.navigate('/settings/account');
             }}

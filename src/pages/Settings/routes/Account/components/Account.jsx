@@ -2,309 +2,214 @@
 import React from 'react';
 import update from 'immutability-helper';
 
-import Box from 'grommet/components/Box';
-import Form from 'grommet/components/Form';
-import Heading from 'grommet/components/Heading';
-import FormField from 'grommet/components/FormField';
-import Paragraph from 'grommet/components/Paragraph';
-import Footer from 'grommet/components/Footer';
-import Button from 'grommet/components/Button';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
-import {
-  checkPass,
-  checkConfirm,
-  checkEmail,
-} from 'verify.js';
+import { FormChecker as withInputValidation } from 'hoc/';
+
+// Styles
+import { FormStyles as styles } from 'components/Auth/styles/';
+
+import { TextField } from 'components/';
+
 import logger from 'logger.js';
 
 type Props = {
-  handlePassword: any,
-  handleEmail: any,
+  // Change password handler from container
+  handlePassword: (newPassword: string, password: string) => null,
+  // Change email handler from container
+  handleEmail: (email: string) => null,
+  // User object
   user: { email: string },
-  err: {
-    password: string,
-    email: string,
-  },
+  // Errors
+  passErr: string,
+  emailErr: string,
+  confirmErr: string,
+  newPassErr: string,
+  // Validation passed by hoc
+  validate: (name: string, newValues: State) => null,
+  // Server status
   waiting: {
     password: boolean,
     email: boolean,
   },
+  // Material UI styles
+  classes: Object,
 };
 
+// Form
 type State = {
   password: string,
-  confirm: string,
-  old: string,
+  confirmPass: string,
+  newPassword: string,
   email: string,
-  err: {
-    password: string,
-    confirm: string,
-    email: string,
-  },
 }
 
 class Account extends React.Component<Props, State> {
   state = {
     password: '',
-    confirm: '',
-    old: '',
+    confirmPass: '',
+    newPassword: '',
     email: this.props.user.email,
-    err: {
-      password: '',
-      confirm: '',
-      email: '',
-    },
   };
 
-  handlePasswordChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
-    this.setState({
-      password: event.target.value,
-      confirm: '',
-      err: update(this.state.err, {
-        confirm: { $set: '' },
-      }),
+  handleInputChange = (name: string) => (event: SyntheticInputEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    this.setState((prevState) => {
+      const newState = prevState;
+
+      // Resets the confirmPass field
+      if(name === 'password') {
+        newState.confirmPass = '';
+        newState.newPassword = '';
+      }
+
+      // Replace selected state with new value
+      newState[name] = value;
+
+      this.props.validate(name, newState);
+
+      return newState;
     });
   }
 
-  handleInputChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
-    const { target } = event;
-    const { value, name } = target;
+  checkForEmailErrors = () => new Promise((resolve, reject) => {
+    // Checks for the errors and empty inputs
+    const preventSubmit = (
+      Boolean(this.props.emailErr)
+      || this.state.email === ''
+    );
 
-    this.setState({
-      [name]: value,
-    });
-  }
-
-  handlePassword = (event) => {
-    // This prevents a '?' from being appended to the URL
-    event.preventDefault();
-    this.props.handlePassword(this.state.password, this.state.old);
-  }
-
-  handleEmail = (event) => {
-    event.preventDefault();
-    this.props.handleEmail(this.state.email);
-  }
-
-  handleFocus = (event) => {
-    const { name } = event.target;
-
-    switch (name) {
-      case 'password':
-        if (this.state.err.password !== '') {
-          this.setState({
-            err: update(this.state.err, {
-              password: { $set: '' },
-            }),
-          });
-        }
-
-        break;
-      case 'confirm':
-        if (this.state.err.confirm !== '') {
-          this.setState({
-            err: update(this.state.err, {
-              confirm: { $set: '' },
-            }),
-          });
-        }
-
-        break;
-      case 'email':
-        if (this.state.err.email !== '') {
-          this.setState({
-            err: update(this.state.err, {
-              email: { $set: '' },
-            }),
-          });
-        }
-
-        break;
-      default:
-        logger.error(`Create an onFocus handler in Account.js for ${name}`);
+    if (preventSubmit === true) {
+      reject(new Error('There are invalid values in the fields above'));
+    // Checks for a stalled server
+    } else if (this.props.waiting === true) {
+      reject(new Error('Server not ready'));
     }
+    resolve();
+  });
+
+  checkForPasswordErrors = () => new Promise((resolve, reject) => {
+    // Checks for the errors and empty inputs
+    const preventSubmit = (
+      Boolean(this.props.newPassErr)
+      || Boolean(this.props.passErr)
+      || Boolean(this.props.confirmErr)
+      || this.state.password === ''
+      || this.state.confirmPass === ''
+      || this.state.newPassword === ''
+    );
+
+    if (preventSubmit === true) {
+      reject(new Error('There are invalid values in the fields above'));
+    // Checks for a stalled server
+    } else if (this.props.waiting === true) {
+      reject(new Error('Server not ready'));
+    }
+    resolve();
+  });
+
+  handlePasswordChangeSubmit = () => {
+    logger.info('Password Change Submitted')
+    const { newPassword, password } = this.state;
+    this.checkForPasswordErrors()
+      .then(() => {
+        this.props.handlePassword(newPassword, password);
+      })
+      .catch((err) => {
+        // TODO: Display a global Error
+        logger.info(this.props)
+        logger.error(err.message)
+      })
   }
 
-  inputChecking = (event) => {
-    const { name } = event.target;
-    let value = null;
+  handleEmailChangeSubmit = () => {
+    logger.info('Email Change Submitted')
+    const { email } = this.state;
+    this.checkForEmailErrors()
+      .then(() => {
+        this.props.handleEmail(email);
+      })
+      .catch((err) => {
+        logger.info(this.props)
+        logger.error(err.message);
+      })
 
-    switch (name) {
-      case 'password':
-        value = checkPass(this.state.password);
-
-        this.setState({
-          err: update(this.state.err, {
-            password: { $set: value },
-          }),
-        });
-
-        break;
-      case 'confirm':
-        value = checkConfirm(this.state.password, this.state.confirm);
-
-        this.setState({
-          err: update(this.state.err, {
-            confirm: { $set: value },
-          }),
-        });
-
-        break;
-      case 'email':
-        value = checkEmail(this.state.email);
-
-        this.setState({
-          err: update(this.state.err, {
-            email: { $set: value },
-          }),
-        });
-
-        break;
-      default:
-        logger.error(`Create an onBlur handler in Account.js for ${name}`);
-    }
   }
 
   render() {
-    // Password conditional rendering
-
-    let passwordMessage = null;
-    if (this.props.err.password !== '') {
-      passwordMessage = (
-        <span style={{ color: 'red' }}>{this.props.err.password}</span>
-      );
-    }
-
-    let passPassword = this.handlePassword;
-    if (this.state.err.password !== '') {
-      passPassword = null;
-    } else if (this.state.err.confirm !== '') {
-      passPassword = null;
-    } else if (this.props.waiting.password === true) {
-      passPassword = null;
-    }
-
-    // Email conditional rendering
-
-    let emailMessage = null;
-    if (this.props.err.email !== '') {
-      emailMessage = (
-        <span style={{ color: 'red' }}>{this.props.err.email}</span>
-      );
-    }
-
-    let passEmail = this.handleEmail;
-    if (this.state.err.email !== '') {
-      passEmail = null;
-    } else if (this.props.waiting.email === true) {
-      passEmail = null;
-    }
-
+    const { classes, emailErr, newPassErr, passErr, confirmErr } = this.props;
+    const { email, password, confirmPass, newPassword } = this.state;
     return (
-      <Box
-        flex
-        align='center'
-        size={{ width: 'full' }}
-      >
-        <Heading tag='h2'>
-          Change Password
-        </Heading>
-        <Form
-          pad='medium'
-          plain={false}
-          onSubmit={passPassword}
-        >
-          <fieldset>
-            <Paragraph margin='none'>
-              Your password should use at least 8 characters. It should
-              contain only ASCII text, with at least one uppercase, one
-              lowercase, one number, and one special character.
-            </Paragraph>
-            <FormField
-              label='Password'
-              error={this.state.err.password}
-            >
-              <input
-                name='password'
-                type='password'
-                value={this.state.password}
-                onBlur={this.inputChecking}
-                onFocus={this.handleFocus}
-                onChange={this.handlePasswordChange}
-              />
-            </FormField>
-            <FormField
-              label='Confirm Password'
-              error={this.state.err.confirm}
-            >
-              <input
-                name='confirm'
-                type='password'
-                value={this.state.confirm}
-                onBlur={this.inputChecking}
-                onFocus={this.handleFocus}
-                onChange={this.handleInputChange}
-              />
-            </FormField>
-            <FormField label='Old Password'>
-              <input
-                name='old'
-                type='password'
-                value={this.state.old}
-                onChange={this.handleInputChange}
-              />
-            </FormField>
-            {passwordMessage}
-          </fieldset>
-          <Footer size='small'>
-            <Button
-              label='Change Password'
-              type='submit'
-              primary
-              onClick={passPassword}
-            />
-          </Footer>
-        </Form>
-        <Heading tag='h2'>
-          Change Email
-        </Heading>
-        <Form
-          pad='medium'
-          plain={false}
-          onSubmit={passEmail}
-        >
-          <fieldset>
-            <Paragraph margin='none'>
-              You use your email to login, so make sure to use your new one
-              on your next visit.
-            </Paragraph>
-            <FormField
-              label='Email'
-              error={this.state.err.email}
-            >
-              <input
-                name='email'
-                type='email'
-                value={this.state.email}
-                onBlur={this.inputChecking}
-                onFocus={this.handleFocus}
-                onChange={this.handleInputChange}
-              />
-            </FormField>
-            {emailMessage}
-          </fieldset>
-          <Footer size='small'>
-            <Button
-              label='Change Email'
-              type='submit'
-              primary
-              onClick={passEmail}
-            />
-          </Footer>
-        </Form>
-      </Box>
+      <React.Fragment>
+        <form className={classes.container} noValidate autoComplete='off'>
+          <Typography variant='title'>
+            Change Password
+          </Typography>
+          <Typography align='center' variant='caption'>
+          Your password should use at least 8 characters. It should
+          contain only ASCII text, with at least one uppercase, one
+          lowercase, one number, and one special character.
+          </Typography>
+          <TextField
+            hide
+            title='Old Password'
+            tag='password'
+            currentValue={password}
+            onNewValue={this.handleInputChange}
+            error={passErr}
+          />
+          <TextField
+            hide
+            title='Confirm Password'
+            tag='confirmPass'
+            currentValue={confirmPass}
+            onNewValue={this.handleInputChange}
+            error={confirmErr}
+          />
+          <TextField
+            hide
+            title='New Password'
+            tag='newPassword'
+            currentValue={newPassword}
+            onNewValue={this.handleInputChange}
+            error={newPassErr}
+          />
+          <Button
+            id='password-submit-button'
+            variant='raised'
+            fullWidth
+            color='primary'
+            onClick={this.handlePasswordChangeSubmit}
+          >
+            Change Password
+          </Button>
+        </form>
+        <form className={classes.container} noValidate autoComplete='off'>
+          <Typography variant='title'>
+            Change Email
+          </Typography>
+          <TextField
+            title='Email'
+            tag='email'
+            currentValue={email}
+            onNewValue={this.handleInputChange}
+            error={emailErr}
+          />
+          <Button
+            id='email-submit-button'
+            variant='raised'
+            fullWidth
+            color='primary'
+            onClick={this.handleEmailChangeSubmit}
+          >
+            Change Email
+          </Button>
+        </form>
+      </React.Fragment>
     );
   }
 }
 
-export default Account;
+export default withStyles(styles)(withInputValidation(Account));

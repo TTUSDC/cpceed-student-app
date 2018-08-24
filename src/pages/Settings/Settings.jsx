@@ -36,15 +36,18 @@ export class Settings extends React.Component<Props, State> {
       root: {}
     }
   }
+
   state = {
     value: 1,
   }
+
   componentDidMount() {
     const { pathname } = this.props.history.location
     this.setState({
       value: pathname === '/settings/profile' ? 0 : 1,
     })
   }
+
   navigate = (url: string) => {
     this.props.history.push(url);
   }

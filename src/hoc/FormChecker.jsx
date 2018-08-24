@@ -5,6 +5,7 @@ const FormChecker = Component => class extends React.Component {
   state = {
     emailErr: '',
     passErr: '',
+    newPassErr: '',
     confirmErr: '',
     idErr: '',
   }
@@ -24,7 +25,7 @@ const FormChecker = Component => class extends React.Component {
     });
   };
 
-  checkPass = (password) => {
+  checkPassQuality = (password) => {
     let output = '';
 
     if(password === '') {
@@ -49,10 +50,24 @@ const FormChecker = Component => class extends React.Component {
       // 1 special character
       output = 'Please use at least one special character.';
     }
+
+    return output;
+  }
+
+  checkPass = (password) => {
+    const output = this.checkPassQuality(password);
     this.setState({
       ...this.state,
       passErr: output,
       confirmErr: '',
+    });
+  };
+
+  checkNewPass = (password) => {
+    const output = this.checkPassQuality(password);
+    this.setState({
+      ...this.state,
+      newPassErr: output,
     });
   };
 
@@ -95,6 +110,9 @@ const FormChecker = Component => class extends React.Component {
         break;
       case 'password':
         this.checkPass(currentValues.password);
+        break;
+      case 'newPassword':
+        this.checkNewPass(currentValues.newPassword);
         break;
       case 'email':
         this.checkEmail(currentValues.email);

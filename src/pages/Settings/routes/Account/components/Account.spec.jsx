@@ -15,10 +15,9 @@ describe('Account.jsx', () => {
       user: {
         email: '',
       },
-      err: {
-        password: '',
-        email: '',
-      },
+      passErr: '',
+      emaillErr: '',
+      newPassErr: '',
       waiting: {
         password: false,
         email: false,
@@ -69,7 +68,7 @@ describe('Account.jsx', () => {
         preventDefault: () => {},
       };
 
-      wrapper.find({ label: 'Change Password' }).simulate('click', event);
+      wrapper.findWhere('#password-submit-button').simulate('click', event);
       expect(props.handlePassword.calledOnce).to.equal(true);
     });
 
@@ -80,7 +79,7 @@ describe('Account.jsx', () => {
         preventDefault: () => {},
       };
 
-      wrapper.find({ label: 'Change Email' }).simulate('click', event);
+      wrapper.find('#email-submit-button').simulate('click', event);
       expect(props.handleEmail.calledOnce).to.equal(true);
     });
   });
@@ -157,8 +156,8 @@ describe('Account.jsx', () => {
       const wrapper = shallow(<Account {...props} />);
 
       expect(wrapper.contains(
-        <span style={{ color: 'red' }}>{props.err.password}</span>),
-      ).to.equal(true);
+        <span style={{ color: 'red' }}>{props.err.password}</span>,
+      )).to.equal(true);
     });
 
     it('Disables password button while waiting for server', () => {
@@ -181,8 +180,8 @@ describe('Account.jsx', () => {
       const wrapper = shallow(<Account {...props} />);
 
       expect(wrapper.contains(
-        <span style={{ color: 'red' }}>{props.err.email}</span>),
-      ).to.equal(true);
+        <span style={{ color: 'red' }}>{props.err.email}</span>,
+      )).to.equal(true);
     });
 
     it('Disables email button while waiting for server', () => {

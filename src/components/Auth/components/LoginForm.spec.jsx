@@ -21,14 +21,15 @@ describe('LoginForm.jsx', () => {
   });
 
   it('Handles input changes', () => {
+    const email = 'test@ttu.edu';
     const event = {
       target: {
-        value: 'test@ttu.edu',
+        value: email,
       },
     };
 
     wrapper.instance().handleInputChange('email')(event);
-    expect(wrapper.state().email).to.equal('test@ttu.edu');
+    expect(wrapper.state().email).to.equal(email);
   });
 
   it('button should be disabled when waiting prop is true', () => {

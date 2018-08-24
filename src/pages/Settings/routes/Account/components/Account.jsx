@@ -15,7 +15,7 @@ import { TextField } from 'components/';
 
 import logger from 'logger.js';
 
-type Props = {
+export type Props = {
   // Change password handler from container
   handlePassword: (newPassword: string, password: string) => null,
   // Change email handler from container
@@ -39,14 +39,14 @@ type Props = {
 };
 
 // Form
-type State = {
+export type State = {
   password: string,
   confirmPass: string,
   newPassword: string,
   email: string,
 }
 
-class Account extends React.Component<Props, State> {
+export class Account extends React.Component<Props, State> {
   state = {
     password: '',
     confirmPass: '',
@@ -118,9 +118,7 @@ class Account extends React.Component<Props, State> {
         this.props.handlePassword(newPassword, password);
       })
       .catch((err) => {
-        // TODO: Display a global Error
-        logger.info(this.props)
-        logger.error(err.message)
+        this.errorHandler(err.message);
       })
   }
 
@@ -132,10 +130,13 @@ class Account extends React.Component<Props, State> {
         this.props.handleEmail(email);
       })
       .catch((err) => {
-        logger.info(this.props)
-        logger.error(err.message);
+        this.errorHandler(err.message);
       })
+  }
 
+  errorHandler = (message) => {
+    // TODO: Display a global Error
+    logger.error(message)
   }
 
   render() {
@@ -169,6 +170,7 @@ class Account extends React.Component<Props, State> {
             error={confirmErr}
           />
           <TextField
+            // TODO: Let the user choose whether or not to hide
             hide
             title='New Password'
             tag='newPassword'

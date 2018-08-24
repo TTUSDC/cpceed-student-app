@@ -21,13 +21,10 @@ type State = {
 }
 
 class ProfileContainer extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      proErr: '',
-      waiting: false,
-    };
-  }
+  state = {
+    proErr: '',
+    waiting: false,
+  };
 
   handleSubmit = (data) => {
     this.setState({

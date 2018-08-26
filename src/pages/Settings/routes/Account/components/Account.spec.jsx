@@ -19,6 +19,12 @@ describe('Account.jsx', () => {
   let handlePasswordSpy = sinon.spy()
   let handleEmailSpy = sinon.spy()
 
+  let handlePasswordChangeSubmitSpy;
+  let handleEmailChangeSubmitSpy;
+  let checkForPasswordErrorsSpy;
+  let checkForEmailErrorsSpy;
+  let errorHandlerSpy;
+
   beforeEach(() => {
     props = {
       handlePassword: handlePasswordSpy,
@@ -38,7 +44,22 @@ describe('Account.jsx', () => {
       classes: {},
     };
     wrapper = shallow(<Account {...props} />);
+
+    handlePasswordChangeSubmitSpy = sinon.spy(wrapper.instance(), 'handlePasswordChangeSubmit');
+    handleEmailChangeSubmitSpy = sinon.spy(wrapper.instance(), 'handleEmailChangeSubmit');
+    checkForEmailErrorsSpy = sinon.spy(wrapper.instance(), 'checkForEmailErrors');
+    checkForPasswordErrorsSpy = sinon.spy(wrapper.instance(), 'checkForPasswordErrors');
+    errorHandlerSpy = sinon.spy(wrapper.instance(), 'errorHandler');
   });
+
+  afterEach(() => {
+    handlePasswordSpy.resetHistory();
+    handleEmailSpy.resetHistory();
+    handleEmailChangeSubmitSpy.resetHistory();
+    handlePasswordChangeSubmitSpy.resetHistory();
+    checkForPasswordErrorsSpy.resetHistory();
+    checkForEmailErrorsSpy.resetHistory();
+  })
 
   it('should handle input changes to password', () => {
     const testValue = 'test';
@@ -74,31 +95,25 @@ describe('Account.jsx', () => {
   });
 
   // TODO: These spies are not being created correctly. Passes manual test but not the written ones
-  it('Calls handlePasswordChangeSubmit when button is pressed', () => {
-    let handlePasswordChangeSubmitSpy = sinon.spy(wrapper.instance(), 'handlePasswordChangeSubmit');
-
+  it('should call handlePasswordChangeSubmit when button is pressed', () => {
     wrapper.find('#password-submit-button').simulate('click');
-    expect(handlePasswordChangeSubmitSpy.called).to.equal(true);
+    expect(handlePasswordChangeSubmitSpy.calledOnce).to.equal(true);
   });
 
-  it('Calls handleEmailChangeSubmit when button is pressed', () => {
-    let handleEmailChangeSubmitSpy = sinon.spy(wrapper.instance(), 'handleEmailChangeSubmit');
-
+  it('should call handleEmailChangeSubmit when button is pressed', () => {
     wrapper.find('#email-submit-button').simulate('click');
-    expect(handleEmailChangeSubmitSpy.called).to.equal(true);
+    expect(handleEmailChangeSubmitSpy.calledOnce).to.equal(true);
   });
 
-  it('should always check for errors when we click sumbit', () => {
-    let errorHandlerSpy = sinon.spy(wrapper.instance(), 'errorHandler');
-    let checkForEmailErrorsSpy = sinon.spy(wrapper.instance(), 'checkForEmailErrors');
-    let checkForPasswordErrorsSpy = sinon.spy(wrapper.instance(), 'checkForPasswordErrors');
-
+  it('should always check for errors when we click sumbit, even if there are errors', () => {
     const emailSubmitButton = wrapper.find('#email-submit-button');
 
     // set props without errors
     wrapper.setProps({...props})
     emailSubmitButton.simulate('click');
     expect(checkForEmailErrorsSpy.calledOnce).to.equal(true);
+
+    // reset call count
     checkForEmailErrorsSpy.resetHistory();
 
     // set props with errors

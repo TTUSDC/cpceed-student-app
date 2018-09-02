@@ -1,7 +1,7 @@
 version: '3'
 services:
   tests:
-    image: ttusdc/cpceed-student-app:test
+    image: ttusdc/cpceed-student-app:test-debug
     ports:
       # <host>:<guest>
       - "9229:9229"
